@@ -1,0 +1,256 @@
+# Pulse Break - .gitignore
+# Keeps your repository clean by ignoring unnecessary files
+
+# ============================================
+# Node.js & NPM
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ============================================
+# Expo & React Native
+# ============================================
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# Metro bundler cache
+.metro-health-check*
+
+# React Native
+*.jsbundle
+
+# ============================================
+# Build Artifacts
+# ============================================
+
+# iOS
+ios/Pods/
+ios/build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+ios/.xcode.env.local
+
+# Android
+android/app/build/
+android/.gradle/
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+*.iml
+*.hprof
+.cxx/
+*.apk
+*.aab
+
+# ============================================
+# Environment & Secrets
+# ============================================
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.staging
+
+# API keys and secrets
+secrets.json
+*.pem
+*.p12
+*.key
+
+# ============================================
+# IDE & Editors
+# ============================================
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Cursor
+.cursor/
+
+# JetBrains (WebStorm, IntelliJ)
+.idea/
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ============================================
+# Operating System
+# ============================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+# ============================================
+# Logs & Temporary Files
+# ============================================
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage & Testing
+coverage/
+*.lcov
+.nyc_output
+.grunt
+.cache
+
+# ============================================
+# Project Specific
+# ============================================
+
+# Demo & Testing Files
+demo/recordings/*.mp4
+demo/screenshots/*.png
+test-data/
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+*~
+
+# Large assets (optional - comment out if you need to track these)
+# assets/videos/*.mp4
+# assets/large-images/*.png
+
+# ============================================
+# Documentation Builds
+# ============================================
+
+# Generated documentation
+docs/_build/
+docs/.doctrees/
+
+# ============================================
+# Dependency Directories (optional)
+# ============================================
+
+# If using Yarn 2+
+# .yarn/*
+# !.yarn/patches
+# !.yarn/releases
+# !.yarn/plugins
+# !.yarn/sdks
+# !.yarn/versions
+# .pnp.*
+
+# ============================================
+# Cloud & Deployment
+# ============================================
+
+# EAS (Expo Application Services)
+.eas.json.backup
+
+# Firebase
+.firebase/
+firebase-debug.log
+
+# ============================================
+# AI & Development Tools
+# ============================================
+
+# GitHub Copilot
+.copilot/
+
+# AI generated temp files
+ai-scratch/
+prompts-temp/
+
+# ============================================
+# Optional: Keep Template Files
+# ============================================
+
+# Include template/example files (remove # to track them)
+# !.env.example
+# !secrets.example.json
+
+# ============================================
+# Team Notes (uncomment if you want to ignore)
+# ============================================
+
+# Personal notes and scratch files
+# NOTES.md
+# TODO.md
+# scratch/
