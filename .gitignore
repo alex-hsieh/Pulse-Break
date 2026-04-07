@@ -144,6 +144,7 @@ ehthumbs_vista.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
 *.lnk
+*.sh
 
 # Linux
 .directory
@@ -254,3 +255,4 @@ prompts-temp/
 # NOTES.md
 # TODO.md
 # scratch/
+
