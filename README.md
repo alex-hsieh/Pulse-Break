@@ -6,7 +6,7 @@ A proactive wellness tool that helps users recognize stress early and take inten
 
 ---
 
-## 📱 About This Project
+## About This Project
 
 **Pulse Break** is a mobile wellness application developed as part of Johnson & Johnson's **Technology Awareness Program (TAP)**. This MVP demonstrates a behavioral approach to workplace stress management, specifically designed for new graduates and young professionals transitioning into the workforce.
 
@@ -31,7 +31,7 @@ Pulse Break takes a **proactive, behavioral approach**:
 
 ---
 
-## 🎯 Project Objectives
+## Project Objectives
 
 ### MVP Scope (2-Week Build)
 Build a functional mobile app prototype demonstrating:
@@ -51,7 +51,7 @@ The complete Pulse Break platform would include:
 
 ---
 
-## 📚 Research & Data Sources
+## Research & Data Sources
 
 This project is grounded in verified research on workplace stress and wellness:
 
@@ -72,13 +72,13 @@ This project is grounded in verified research on workplace stress and wellness:
 
 ---
 
-## 👥 Development Team
+## Development Team
 
 **The Winning Team** — Johnson & Johnson TAP Program, Sprint 1
 
 | Role | Name | Responsibilities |
 |------|------|------------------|
-| **Project Lead & Developer** | Alex Chian Hsieh | Technical architecture, React Native development, data integration, presentation lead |
+| **Project Lead & Developer** | Alexander Hsieh | Technical architecture, React Native development, data integration, presentation lead |
 | **UX/Design Lead** | Vince Watson | User experience design, visual design, Let Them Theory content, presentation design |
 | **Data Engineer** | Javin Vance | Data models, storage strategy, analytics, QA testing |
 
@@ -89,7 +89,7 @@ This project is grounded in verified research on workplace stress and wellness:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Current MVP (Day 1 Decision)
 
@@ -124,7 +124,7 @@ This project is grounded in verified research on workplace stress and wellness:
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -182,7 +182,7 @@ pulse-break/
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 ### Core Documents
 - **[MVP_BUILD_SPEC.md](docs/MVP_BUILD_SPEC.md)** — What we're building (features, priorities, timeline)
@@ -200,7 +200,7 @@ pulse-break/
 
 ---
 
-## 🎨 Design Philosophy
+## Design Philosophy
 
 **Visual Identity:**
 - **Calm and professional** — Not clinical or urgent
@@ -216,7 +216,7 @@ pulse-break/
 
 ---
 
-## 🔐 Privacy & Security
+## Privacy & Security
 
 ### MVP Approach
 - **Local storage only** — All data stays on device (AsyncStorage)
@@ -233,7 +233,7 @@ pulse-break/
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Manual Testing Checklist
 - [ ] Check-in flow: Tap emoji → see confirmation → data saves
@@ -256,7 +256,7 @@ pulse-break/
 
 ---
 
-## 📅 Development Timeline
+## Development Timeline
 
 **Total Duration:** 7-8 days (aggressive sprint)
 
@@ -271,7 +271,7 @@ pulse-break/
 
 ---
 
-## 🎯 Success Metrics
+## Success Metrics
 
 ### Technical Success
 - [ ] All Priority 1 features functional
@@ -292,7 +292,7 @@ pulse-break/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 This is an academic project for J&J's TAP Program. External contributions are not currently accepted.
 
@@ -313,19 +313,13 @@ This is an academic project for J&J's TAP Program. External contributions are no
 
 ---
 
-## 📜 License
+## License
 
 This project is developed as part of Johnson & Johnson's Technology Awareness Program and is intended for educational and demonstration purposes only.
 
 **Not for commercial use.**
 
 ---
-
-## 📞 Contact & Support
-
-**Project Lead:** Alex Chian Hsieh  
-**Program:** Johnson & Johnson Technology Awareness Program (TAP)  
-**Presentation Date:** April 16, 2026
 
 ### Quick Links
 - [GitHub Issues](../../issues) — Track project progress
@@ -334,7 +328,7 @@ This project is developed as part of Johnson & Johnson's Technology Awareness Pr
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 **Special Thanks:**
 - Johnson & Johnson IT Management for the TAP opportunity
