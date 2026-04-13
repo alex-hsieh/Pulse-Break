@@ -128,11 +128,8 @@ This project is grounded in verified research on workplace stress and wellness:
 
 ### Prerequisites
 
-**For React Native Path:**
 - Node.js 18+ and npm
-- Expo CLI: `npm install -g expo-cli`
-- iOS Simulator (Mac only) or Android Emulator
-- Expo Go app on your phone (optional, for device testing)
+- Expo Go app installed on your phone ([iOS](https://apps.apple.com/app/expo-go/id982107779) / [Android](https://play.google.com/store/apps/details?id=host.exp.exponent))
 
 **For Figma Path:**
 - Figma account (free)
@@ -150,10 +147,15 @@ npm install
 
 # Start the development server
 npx expo start
-
-# Scan QR code with Expo Go app (iOS/Android)
-# Or press 'i' for iOS simulator, 'a' for Android emulator
 ```
+
+**Running on your phone:**
+1. Open Expo Go on your phone
+2. When prompted, tap **"Allow Expo to find devices on your local network"**
+3. Scan the QR code shown in your terminal with your phone camera
+   - iOS: use the default Camera app
+   - Android: use the QR scanner inside Expo Go
+4. App loads on your device
 
 ### Project Structure
 
