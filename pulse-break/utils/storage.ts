@@ -1,13 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const CHECKINS_KEY = 'pulse_break_checkins';
-
 export interface CheckIn {
   id: string;
   timestamp: string;
   stressLevel: number;
   notes?: string;
 }
+
+const CHECKINS_KEY = 'pulse_break_checkins';
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -20,7 +20,6 @@ export async function saveCheckIn(stressLevel: number, notes?: string): Promise<
     stressLevel,
     notes,
   };
-
   const existing = await getCheckIns();
   const updated = [entry, ...existing];
   await AsyncStorage.setItem(CHECKINS_KEY, JSON.stringify(updated));
