@@ -22,6 +22,7 @@ export default function BreakScreen() {
   const router = useRouter();
 
   return (
+    // need to remove this dependency and update since it's depracted
     <SafeAreaView style={styles.container}>
       <View style={styles.inner}>
 
