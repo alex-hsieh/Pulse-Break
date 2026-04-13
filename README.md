@@ -155,7 +155,7 @@ npx expo start
 3. Scan the QR code shown in your terminal with your phone camera
    - iOS: use the default Camera app
    - Android: use the QR scanner inside Expo Go
-4. App loads on your device
+4. App loads on your device.
 
 ### Project Structure
 
