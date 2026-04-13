@@ -57,6 +57,7 @@ export default function ReflectionScreen() {
   const followUp = response ? FOLLOW_UPS[response] : null;
 
   return (
+    // need to update SafeAreaView since it's deprecated in latest react native versions
     <SafeAreaView style={styles.container}>
       <View style={styles.inner}>
 
