@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { saveCheckIn } from '../utils/storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   View,
   Text,
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  SafeAreaView,
   Animated,
 } from 'react-native';
 
@@ -38,10 +39,10 @@ export default function HomeScreen() {
     setConfirmed(false);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selected) return;
     const stressCategory = evaluateStress(selected);
-    // TODO: Issue #6 — save to AsyncStorage (Javin)
+    await saveCheckIn(selected, notes || undefined);
     setConfirmed(true);
     if (stressCategory === 'high') {
       setTimeout(() => {

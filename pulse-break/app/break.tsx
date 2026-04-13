@@ -1,10 +1,12 @@
 import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   View,
   Text,
   TouchableOpacity,
+  TextInput,
   StyleSheet,
-  SafeAreaView,
+  Animated,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
@@ -22,7 +24,6 @@ export default function BreakScreen() {
   const router = useRouter();
 
   return (
-    // need to remove this dependency and update since it's deprecated in latest react native versions
     <SafeAreaView style={styles.container}>
       <View style={styles.inner}>
 
