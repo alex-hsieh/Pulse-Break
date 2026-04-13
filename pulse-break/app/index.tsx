@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
 import {
   View,
   Text,
@@ -39,13 +40,20 @@ export default function HomeScreen() {
 
   const handleSubmit = () => {
     if (!selected) return;
+    const stressCategory = evaluateStress(selected);
     // TODO: Issue #6 — save to AsyncStorage (Javin)
     setConfirmed(true);
-    setTimeout(() => {
-      setSelected(null);
-      setNotes('');
-      setConfirmed(false);
-    }, 2000);
+    if (stressCategory === 'high') {
+      setTimeout(() => {
+        router.push('/break' as any);
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        setSelected(null);
+        setNotes('');
+        setConfirmed(false);
+      }, 2000);
+    }
   };
 
   return (
@@ -97,11 +105,16 @@ export default function HomeScreen() {
         )}
 
         {/* Confirmation */}
-        {confirmed && (
-          <View style={styles.confirmation}>
-            <Text style={styles.confirmationText}>Check-in logged. Keep going!</Text>
-          </View>
-        )}
+        {confirmed && (() => {
+          const isHigh = !!selected && evaluateStress(selected) === 'high';
+          return (
+            <View style={[styles.confirmation, isHigh && styles.confirmationHigh]}>
+              <Text style={[styles.confirmationText, isHigh && styles.confirmationTextHigh]}>
+                {isHigh ? 'Stress detected. Taking you to a break...' : 'Check-in logged. Keep going!'}
+              </Text>
+            </View>
+          );
+        })()}
 
       </View>
     </SafeAreaView>
@@ -213,4 +226,19 @@ const styles = StyleSheet.create({
     color: COLORS.sage,
     fontWeight: '600',
   },
+  confirmationHigh: {
+    backgroundColor: '#D4715A22',
+    borderColor: '#D4715A',
+  },
+  confirmationTextHigh: {
+    color: '#D4715A',
+  },
 });
+
+const router = useRouter();
+
+const evaluateStress = (level: number): 'low' | 'moderate' | 'high' => {
+  if (level <= 2) return 'low';
+  if (level === 3) return 'moderate';
+  return 'high';
+};
