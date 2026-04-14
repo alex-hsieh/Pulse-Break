@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { saveReflection } from '../utils/storage';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
@@ -16,6 +17,7 @@ const COLORS = {
   inkMid: '#3D5050',
   inkSoft: '#7A9090',
   white: '#FDFCFA',
+  purple: '#8B6BC0',
 };
 
 const PROMPTS: string[] = (promptData as { prompts: { id: string; text: string; category: string }[] }).prompts.map(p => p.text);
@@ -35,6 +37,7 @@ type Response = 'controllable' | 'uncontrollable' | null;
 
 export default function ReflectionScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { checkInId, stressCategory, breakDuration } = useLocalSearchParams<{
     checkInId: string;
     stressCategory: string;
@@ -64,9 +67,8 @@ export default function ReflectionScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Violet header bar — matches storyboard S5 */}
-      <View style={styles.headerBar}>
+    <SafeAreaView style={styles.container}>
+      <View style={[styles.headerBar, { paddingTop: insets.top + 14 }]}>
         <Text style={styles.headerEyebrow}>Reflection</Text>
         <Text style={styles.headerSub}>Let Them Theory</Text>
       </View>
@@ -81,18 +83,10 @@ export default function ReflectionScreen() {
 
         {!response && (
           <View style={styles.responseRow}>
-            <TouchableOpacity
-              style={[styles.responseButton, styles.responseYes]}
-              onPress={() => handleResponse('controllable')}
-              activeOpacity={0.8}
-            >
+            <TouchableOpacity style={[styles.responseButton, styles.responseYes]} onPress={() => handleResponse('controllable')} activeOpacity={0.8}>
               <Text style={styles.responseYesText}>Yes — Let Me act</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.responseButton, styles.responseNo]}
-              onPress={() => handleResponse('uncontrollable')}
-              activeOpacity={0.8}
-            >
+            <TouchableOpacity style={[styles.responseButton, styles.responseNo]} onPress={() => handleResponse('uncontrollable')} activeOpacity={0.8}>
               <Text style={styles.responseNoText}>No — Let Them</Text>
             </TouchableOpacity>
           </View>
@@ -108,9 +102,7 @@ export default function ReflectionScreen() {
         )}
 
         <View style={styles.robbinsCard}>
-          <Text style={styles.robbinsQuote}>
-            "You can't control others — only your response to them."
-          </Text>
+          <Text style={styles.robbinsQuote}>"You can't control others — only your response to them."</Text>
           <Text style={styles.robbinsAttrib}>— Mel Robbins, The Let Them Theory</Text>
         </View>
 
@@ -125,21 +117,21 @@ export default function ReflectionScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.cream },
+  container: { flex: 1, backgroundColor: '#8B6BC0' },
   headerBar: {
     backgroundColor: '#8B6BC0',
-    paddingHorizontal: 24, paddingVertical: 14,
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingBottom: 14,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headerEyebrow: { fontSize: 13, color: 'rgba(255,255,255,0.9)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.8 },
   headerSub: { fontSize: 12, color: 'rgba(255,255,255,0.65)' },
-  scroll: { flex: 1 },
+  scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 48 },
   header: { fontSize: 28, fontWeight: '700', color: COLORS.ink, lineHeight: 36, marginBottom: 28 },
-  promptCard: {
-    backgroundColor: COLORS.white, borderRadius: 16, padding: 24,
-    marginBottom: 24, borderWidth: 1, borderColor: '#E0DDD6',
-  },
+  promptCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 24, marginBottom: 24, borderWidth: 1, borderColor: '#E0DDD6' },
   promptLabel: { fontSize: 11, color: '#8B6BC0', fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 10 },
   promptText: { fontSize: 20, fontWeight: '600', color: COLORS.ink, lineHeight: 28 },
   responseRow: { flexDirection: 'row', gap: 12, marginBottom: 24 },
@@ -155,10 +147,7 @@ const styles = StyleSheet.create({
   followUpTealText: { color: COLORS.teal },
   followUpSageText: { color: COLORS.sage },
   followUpMessage: { fontSize: 15, color: COLORS.inkMid, lineHeight: 22 },
-  robbinsCard: {
-    backgroundColor: COLORS.white, borderRadius: 12, padding: 16,
-    marginBottom: 24, borderWidth: 1, borderColor: '#E0DDD6', alignItems: 'center',
-  },
+  robbinsCard: { backgroundColor: COLORS.white, borderRadius: 12, padding: 16, marginBottom: 24, borderWidth: 1, borderColor: '#E0DDD6', alignItems: 'center' },
   robbinsQuote: { fontSize: 14, fontStyle: 'italic', color: COLORS.inkMid, textAlign: 'center', lineHeight: 22, marginBottom: 6 },
   robbinsAttrib: { fontSize: 12, color: COLORS.inkSoft, textAlign: 'center' },
   doneButton: { backgroundColor: COLORS.ink, borderRadius: 12, paddingVertical: 16, alignItems: 'center' },

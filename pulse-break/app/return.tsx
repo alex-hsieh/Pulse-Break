@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing, ScrollView } from 'react-native';
 
@@ -30,6 +31,7 @@ const DURATION_LABEL: Record<string, string> = {
 
 export default function ReturnScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { stressCategory, reflectionType } = useLocalSearchParams<{
     stressCategory: string;
     reflectionType: string;
@@ -40,7 +42,6 @@ export default function ReturnScreen() {
   const duration = DURATION_LABEL[category] ?? '10 min';
   const scoreDrop = drop.before - drop.after;
 
-  // Animate the stress ring fill
   const ringAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -52,13 +53,11 @@ export default function ReturnScreen() {
     }).start();
   }, []);
 
-  // SVG-style ring via border trick — animate from before% down to after%
   const ringColor = drop.after <= 30 ? COLORS.sage : COLORS.coral;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Teal header — matches storyboard S7 */}
-      <View style={styles.headerBar}>
+    <SafeAreaView style={styles.container}>
+      <View style={[styles.headerBar, { paddingTop: insets.top + 16 }]}>
         <Text style={styles.headerCheck}>✅</Text>
         <View>
           <Text style={styles.headerTitle}>You're Back on Track</Text>
@@ -67,8 +66,6 @@ export default function ReturnScreen() {
       </View>
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-
-        {/* Stress ring — S7 style */}
         <View style={styles.ringSection}>
           <View style={styles.ringWrap}>
             <View style={[styles.ringOuter, { borderColor: ringColor }]}>
@@ -81,7 +78,6 @@ export default function ReturnScreen() {
           <Text style={styles.ringCaption}>Down from {drop.before}% before your break</Text>
         </View>
 
-        {/* 3-stat summary — S7 style */}
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <Text style={[styles.statValue, { color: COLORS.teal }]}>{duration}</Text>
@@ -97,7 +93,6 @@ export default function ReturnScreen() {
           </View>
         </View>
 
-        {/* Azure ML learning card — S7 style */}
         <View style={styles.mlCard}>
           <Text style={styles.mlTitle}>🔁 Azure ML Learning</Text>
           <Text style={styles.mlText}>
@@ -107,7 +102,6 @@ export default function ReturnScreen() {
           </Text>
         </View>
 
-        {/* Intervention tiers recap */}
         <View style={styles.recapCard}>
           <Text style={styles.recapTitle}>What helped</Text>
           <View style={styles.recapRow}>
@@ -127,68 +121,45 @@ export default function ReturnScreen() {
         <TouchableOpacity style={styles.ctaButton} onPress={() => router.push('/' as any)} activeOpacity={0.8}>
           <Text style={styles.ctaText}>Return to Work — You've Got This</Text>
         </TouchableOpacity>
-
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.cream },
+  container: { flex: 1, backgroundColor: COLORS.teal },
   headerBar: {
     backgroundColor: COLORS.teal,
-    paddingHorizontal: 24, paddingVertical: 16,
-    flexDirection: 'row', alignItems: 'center', gap: 14,
+    paddingHorizontal: 24,
+    paddingBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
   },
   headerCheck: { fontSize: 28 },
   headerTitle: { fontSize: 18, fontWeight: '700', color: COLORS.white },
   headerSub: { fontSize: 13, color: 'rgba(255,255,255,0.75)', marginTop: 2 },
-  scroll: { flex: 1 },
+  scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 28, paddingBottom: 48 },
-
-  // Ring
   ringSection: { alignItems: 'center', marginBottom: 24 },
   ringWrap: { marginBottom: 8 },
-  ringOuter: {
-    width: 140, height: 140, borderRadius: 70,
-    borderWidth: 6, justifyContent: 'center', alignItems: 'center',
-  },
+  ringOuter: { width: 140, height: 140, borderRadius: 70, borderWidth: 6, justifyContent: 'center', alignItems: 'center' },
   ringInner: { alignItems: 'center' },
   ringValue: { fontSize: 36, fontWeight: '800' },
   ringLabel: { fontSize: 12, color: COLORS.inkSoft, marginTop: 2 },
   ringCaption: { fontSize: 13, color: COLORS.inkSoft, textAlign: 'center' },
-
-  // Stats
   statsRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  statCard: {
-    flex: 1, backgroundColor: COLORS.white, borderRadius: 12,
-    padding: 14, alignItems: 'center', borderWidth: 1, borderColor: '#E0DDD6',
-  },
+  statCard: { flex: 1, backgroundColor: COLORS.white, borderRadius: 12, padding: 14, alignItems: 'center', borderWidth: 1, borderColor: '#E0DDD6' },
   statValue: { fontSize: 22, fontWeight: '800', marginBottom: 4 },
   statLabel: { fontSize: 11, color: COLORS.inkSoft, textAlign: 'center' },
-
-  // ML card
-  mlCard: {
-    backgroundColor: COLORS.tealPale, borderRadius: 12, padding: 16,
-    marginBottom: 16, borderWidth: 1, borderColor: COLORS.teal + '44',
-  },
+  mlCard: { backgroundColor: COLORS.tealPale, borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: COLORS.teal + '44' },
   mlTitle: { fontSize: 13, fontWeight: '700', color: COLORS.teal, marginBottom: 6 },
   mlText: { fontSize: 14, color: COLORS.inkMid, lineHeight: 21 },
-
-  // Recap
-  recapCard: {
-    backgroundColor: COLORS.white, borderRadius: 12, padding: 16,
-    marginBottom: 24, borderWidth: 1, borderColor: '#E0DDD6',
-  },
+  recapCard: { backgroundColor: COLORS.white, borderRadius: 12, padding: 16, marginBottom: 24, borderWidth: 1, borderColor: '#E0DDD6' },
   recapTitle: { fontSize: 11, color: COLORS.inkSoft, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 12 },
   recapRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 10 },
   recapIcon: { fontSize: 16, marginTop: 1 },
   recapText: { fontSize: 14, color: COLORS.inkMid, flex: 1, lineHeight: 20 },
-
-  // CTA
-  ctaButton: {
-    backgroundColor: COLORS.ink, borderRadius: 12,
-    paddingVertical: 18, alignItems: 'center',
-  },
+  ctaButton: { backgroundColor: COLORS.ink, borderRadius: 12, paddingVertical: 18, alignItems: 'center' },
   ctaText: { color: COLORS.white, fontSize: 16, fontWeight: '700' },
 });
