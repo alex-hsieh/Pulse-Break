@@ -13,9 +13,9 @@ function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
-export async function saveCheckIn(stressLevel: number, notes?: string): Promise<CheckIn> {
+export async function saveCheckIn(stressLevel: number, notes?: string, existingId?: string): Promise<CheckIn> {
   const entry: CheckIn = {
-    id: generateId(),
+    id: existingId ?? generateId(),
     timestamp: new Date().toISOString(),
     stressLevel,
     notes,
@@ -70,4 +70,11 @@ export async function getReflections(): Promise<Reflection[]> {
   } catch {
     return [];
   }
+}
+
+export async function getWeeklyCheckIns(): Promise<CheckIn[]> {
+  const all = await getCheckIns();
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  return all.filter(c => new Date(c.timestamp) >= sevenDaysAgo);
 }

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { useRouter } from 'expo-router';
+import React, { useState, useCallback } from 'react';
+import { useRouter, Link, useFocusEffect } from 'expo-router';
 import { saveCheckIn } from '../utils/storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  Animated,
-} from 'react-native';
+import { 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  TextInput, 
+  StyleSheet, 
+  Keyboard, 
+  TouchableWithoutFeedback } from 'react-native';
 
 const COLORS = {
   sage: '#7A9E7E',
@@ -33,6 +33,19 @@ export default function HomeScreen() {
   const [selected, setSelected] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [confirmed, setConfirmed] = useState(false);
+  const [stressCategory, setStressCategory] = useState<'low' | 'moderate' | 'high' | 'very_high' | null>(null);
+
+  useFocusEffect(
+  useCallback(() => {
+    return () => {
+      // only reset on unmount (leaving screen), not on focus
+      setSelected(null);
+      setNotes('');
+      setConfirmed(false);
+      setStressCategory(null);
+    };
+    }, [])
+  );
 
   const handleSelect = (level: number) => {
     setSelected(level);
@@ -41,12 +54,14 @@ export default function HomeScreen() {
 
   const handleSubmit = async () => {
     if (!selected) return;
-    const stressCategory = evaluateStress(selected);
-    const entry = await saveCheckIn(selected, notes || undefined);
+    const category = evaluateStress(selected);
+    setStressCategory(category);
+    const checkInId = Date.now().toString(36) + Math.random().toString(36).slice(2);
+    saveCheckIn(selected, notes || undefined, checkInId).catch(console.error);
     setConfirmed(true);
-    if (stressCategory === 'high') {
+    if (category === 'high' || category === 'very_high') {
       setTimeout(() => {
-        router.push({ pathname: '/break', params: { checkInId: entry.id } } as any);
+        router.push({ pathname: '/break', params: { checkInId, stressCategory: category } } as any);
       }, 2000);
     } else {
       setTimeout(() => {
@@ -58,67 +73,75 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.inner}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.inner}>
 
-        {/* Header */}
-        <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
-        <Text style={styles.header}>How are you feeling?</Text>
+          {/* Header */}
+          <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
+          <Text style={styles.header}>How are you feeling?</Text>
 
-        {/* Emoji Scale */}
-        <View style={styles.emojiRow}>
-          {EMOJI_SCALE.map(({ level, emoji, label }) => {
-            const isSelected = selected === level;
-            return (
-              <TouchableOpacity
-                key={level}
-                style={[styles.emojiButton, isSelected && styles.emojiSelected]}
-                onPress={() => handleSelect(level)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.emoji}>{emoji}</Text>
-                <Text style={[styles.emojiLabel, isSelected && styles.emojiLabelSelected]}>
-                  {label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        {/* Notes input — shown after selection */}
-        {selected && !confirmed && (
-          <View style={styles.notesWrapper}>
-            <TextInput
-              style={styles.notesInput}
-              placeholder="What's on your mind? (optional)"
-              placeholderTextColor={COLORS.gray}
-              value={notes}
-              onChangeText={setNotes}
-              maxLength={200}
-              multiline
-            />
-            <Text style={styles.charCount}>{notes.length}/200</Text>
-
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitText}>Log Check-In</Text>
-            </TouchableOpacity>
+          {/* Emoji Scale */}
+          <View style={styles.emojiRow}>
+            {EMOJI_SCALE.map(({ level, emoji, label }) => {
+              const isSelected = selected === level;
+              return (
+                <TouchableOpacity
+                  key={level}
+                  style={[styles.emojiButton, isSelected && styles.emojiSelected]}
+                  onPress={() => handleSelect(level)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.emoji}>{emoji}</Text>
+                  <Text style={[styles.emojiLabel, isSelected && styles.emojiLabelSelected]}>
+                    {label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
-        )}
 
-        {/* Confirmation */}
-        {confirmed && (() => {
-          const isHigh = !!selected && evaluateStress(selected) === 'high';
-          return (
-            <View style={[styles.confirmation, isHigh && styles.confirmationHigh]}>
-              <Text style={[styles.confirmationText, isHigh && styles.confirmationTextHigh]}>
-                {isHigh ? 'Stress detected. Taking you to a break...' : 'Check-in logged. Keep going!'}
+          {/* Notes input — shown after selection */}
+          {selected && !confirmed && (
+            <View style={styles.notesWrapper}>
+              <TextInput
+                style={styles.notesInput}
+                placeholder="What's on your mind? (optional)"
+                placeholderTextColor={COLORS.gray}
+                value={notes}
+                onChangeText={setNotes}
+                maxLength={200}
+                multiline
+              />
+              <Text style={styles.charCount}>{notes.length}/200</Text>
+
+              <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                <Text style={styles.submitText}>Log Check-In</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Confirmation */}
+          {confirmed && stressCategory && (
+            <View style={[
+              styles.confirmation,
+              (stressCategory === 'high' || stressCategory === 'very_high') && styles.confirmationHigh
+            ]}>
+              <Text style={[
+                styles.confirmationText,
+                (stressCategory === 'high' || stressCategory === 'very_high') && styles.confirmationTextHigh
+              ]}>
+                {stressCategory === 'low' && "You're doing great. Keep it up!"}
+                {stressCategory === 'moderate' && "Feeling the pressure? Consider a short pause."}
+                {stressCategory === 'high' && "Stress detected. Let's take a break."}
+                {stressCategory === 'very_high' && "High stress detected. You need a break now."}
               </Text>
             </View>
-          );
-        })()}
+          )}
 
-      </View>
-    </SafeAreaView>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -241,8 +264,9 @@ const styles = StyleSheet.create({
 
 const router = useRouter();
 
-const evaluateStress = (level: number): 'low' | 'moderate' | 'high' => {
+const evaluateStress = (level: number): 'low' | 'moderate' | 'high' | 'very_high' => {
   if (level <= 2) return 'low';
   if (level === 3) return 'moderate';
-  return 'high';
+  if (level === 4) return 'high';
+  return 'very_high';
 };

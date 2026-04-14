@@ -22,7 +22,8 @@ const COLORS = {
 
 export default function BreakScreen() {
   const router = useRouter();
-  const { checkInId } = useLocalSearchParams<{ checkInId: string }>();
+  const { checkInId, stressCategory } = useLocalSearchParams<{ checkInId: string, stressCategory: string }>();
+  const isVeryHigh = stressCategory === 'very_high';
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,8 +31,10 @@ export default function BreakScreen() {
 
         <View style={styles.accent} />
 
-        <Text style={styles.eyebrow}>High stress detected</Text>
-        <Text style={styles.header}>Let's take a quick{'\n'}break to reset.</Text>
+        <Text style={styles.eyebrow}>{isVeryHigh ? 'Urgent' : 'High stress detected'}</Text>
+        <Text style={styles.header}>
+          {isVeryHigh ? 'You need a break\nright now.' : "Let's take a quick\nbreak to reset."}
+        </Text>
 
         <View style={styles.durationCard}>
           <Text style={styles.durationLabel}>Recommended duration</Text>
