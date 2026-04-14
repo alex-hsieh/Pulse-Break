@@ -5,7 +5,6 @@ import { saveReflection } from '../utils/storage';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import promptData from '../content/reflection-prompts.json';
 
-
 const COLORS = {
   sage: '#7A9E7E',
   teal: '#3D8B8B',
