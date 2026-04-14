@@ -103,14 +103,7 @@ export default function HomeScreen() {
 
           <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
           <Text style={styles.header}>How are you feeling?</Text>
-
-          {/* Daily encouragement */}
-          {!selected && !confirmed && (
-            <View style={styles.encouragementCard}>
-              <Text style={styles.encouragementText}>{encouragement}</Text>
-            </View>
-          )}
-
+          
           <View style={styles.emojiRow}>
             {EMOJI_SCALE.map(({ level, emoji, label }) => {
               const isSelected = selected === level;
@@ -146,6 +139,9 @@ export default function HomeScreen() {
               <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                 <Text style={styles.submitText}>Log Check-In</Text>
               </TouchableOpacity>
+
+              <Text style={styles.quote}>"{encouragement}"</Text>
+
             </View>
           )}
 
@@ -186,11 +182,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E0DDD6',
   },
-  encouragementText: {
+  quote: {
+    marginTop: 20,
     fontSize: 14,
-    color: COLORS.teal,
-    fontWeight: '500',
-    lineHeight: 20,
+    fontStyle: 'italic',
+    color: COLORS.gray,
+    textAlign: 'center',
+    lineHeight: 22,
+    paddingHorizontal: 8,
   },
   emojiRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 32 },
   emojiButton: { alignItems: 'center', padding: 6, borderRadius: 12, flex: 1, marginHorizontal: 2, height: 80, justifyContent: 'center' },
