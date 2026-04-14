@@ -1,15 +1,16 @@
 import React, { useState, useCallback } from 'react';
-import { useRouter, Link, useFocusEffect } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { saveCheckIn } from '../utils/storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  TextInput, 
-  StyleSheet, 
-  Keyboard, 
-  TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 const COLORS = {
   sage: '#7A9E7E',
@@ -29,21 +30,35 @@ const EMOJI_SCALE = [
   { level: 5, emoji: '😰', label: 'Very Stressed' },
 ];
 
+function evaluateStress(level: number): 'low' | 'moderate' | 'high' | 'very_high' {
+  if (level <= 2) return 'low';
+  if (level === 3) return 'moderate';
+  if (level === 4) return 'high';
+  return 'very_high';
+}
+
+function getTimeOfDay() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'morning';
+  if (hour < 17) return 'afternoon';
+  return 'evening';
+}
+
 export default function HomeScreen() {
+  const router = useRouter();
   const [selected, setSelected] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [stressCategory, setStressCategory] = useState<'low' | 'moderate' | 'high' | 'very_high' | null>(null);
 
   useFocusEffect(
-  useCallback(() => {
-    return () => {
-      // only reset on unmount (leaving screen), not on focus
-      setSelected(null);
-      setNotes('');
-      setConfirmed(false);
-      setStressCategory(null);
-    };
+    useCallback(() => {
+      return () => {
+        setSelected(null);
+        setNotes('');
+        setConfirmed(false);
+        setStressCategory(null);
+      };
     }, [])
   );
 
@@ -77,11 +92,9 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.inner}>
 
-          {/* Header */}
           <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
           <Text style={styles.header}>How are you feeling?</Text>
 
-          {/* Emoji Scale */}
           <View style={styles.emojiRow}>
             {EMOJI_SCALE.map(({ level, emoji, label }) => {
               const isSelected = selected === level;
@@ -101,7 +114,6 @@ export default function HomeScreen() {
             })}
           </View>
 
-          {/* Notes input — shown after selection */}
           {selected && !confirmed && (
             <View style={styles.notesWrapper}>
               <TextInput
@@ -121,15 +133,14 @@ export default function HomeScreen() {
             </View>
           )}
 
-          {/* Confirmation */}
           {confirmed && stressCategory && (
             <View style={[
               styles.confirmation,
-              (stressCategory === 'high' || stressCategory === 'very_high') && styles.confirmationHigh
+              (stressCategory === 'high' || stressCategory === 'very_high') && styles.confirmationHigh,
             ]}>
               <Text style={[
                 styles.confirmationText,
-                (stressCategory === 'high' || stressCategory === 'very_high') && styles.confirmationTextHigh
+                (stressCategory === 'high' || stressCategory === 'very_high') && styles.confirmationTextHigh,
               ]}>
                 {stressCategory === 'low' && "You're doing great. Keep it up!"}
                 {stressCategory === 'moderate' && "Feeling the pressure? Consider a short pause."}
@@ -145,128 +156,24 @@ export default function HomeScreen() {
   );
 }
 
-function getTimeOfDay() {
-  const hour = new Date().getHours();
-  if (hour < 12) return 'morning';
-  if (hour < 17) return 'afternoon';
-  return 'evening';
-}
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.cream,
-  },
-  inner: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-  },
-  greeting: {
-    fontSize: 14,
-    color: COLORS.gray,
-    textTransform: 'capitalize',
-    marginBottom: 4,
-  },
-  header: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: COLORS.dark,
-    marginBottom: 40,
-  },
-  emojiRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 32,
-  },
-  emojiButton: {
-    alignItems: 'center',
-    padding: 6,
-    borderRadius: 12,
-    flex: 1,
-    marginHorizontal: 2,
-    height: 80,
-    justifyContent: 'center',
-  },
-  emojiSelected: {
-    backgroundColor: COLORS.sage + '33', // sage at 20% opacity.
-    borderWidth: 1.5,
-    borderColor: COLORS.sage,
-  },
-  emoji: {
-    fontSize: 32,
-    marginBottom: 4,
-  },
-  emojiLabel: {
-    fontSize: 9,
-    color: COLORS.gray,
-    textAlign: 'center',
-    flexWrap: 'nowrap',
-  },
-  emojiLabelSelected: {
-    color: COLORS.sage,
-    fontWeight: '600',
-  },
-  notesWrapper: {
-    marginTop: 8,
-  },
-  notesInput: {
-    backgroundColor: COLORS.white,
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 15,
-    color: COLORS.dark,
-    minHeight: 80,
-    textAlignVertical: 'top',
-    borderWidth: 1,
-    borderColor: '#E0DDD6',
-  },
-  charCount: {
-    fontSize: 12,
-    color: COLORS.gray,
-    textAlign: 'right',
-    marginTop: 4,
-    marginBottom: 16,
-  },
-  submitButton: {
-    backgroundColor: COLORS.teal,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  submitText: {
-    color: COLORS.white,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  confirmation: {
-    backgroundColor: COLORS.sage + '22',
-    borderRadius: 12,
-    padding: 20,
-    alignItems: 'center',
-    marginTop: 16,
-    borderWidth: 1,
-    borderColor: COLORS.sage,
-  },
-  confirmationText: {
-    fontSize: 16,
-    color: COLORS.sage,
-    fontWeight: '600',
-  },
-  confirmationHigh: {
-    backgroundColor: '#D4715A22',
-    borderColor: '#D4715A',
-  },
-  confirmationTextHigh: {
-    color: '#D4715A',
-  },
+  container: { flex: 1, backgroundColor: COLORS.cream },
+  inner: { flex: 1, paddingHorizontal: 24, paddingTop: 40 },
+  greeting: { fontSize: 14, color: COLORS.gray, textTransform: 'capitalize', marginBottom: 4 },
+  header: { fontSize: 28, fontWeight: '700', color: COLORS.dark, marginBottom: 40 },
+  emojiRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 32 },
+  emojiButton: { alignItems: 'center', padding: 6, borderRadius: 12, flex: 1, marginHorizontal: 2, height: 80, justifyContent: 'center' },
+  emojiSelected: { backgroundColor: COLORS.sage + '33', borderWidth: 1.5, borderColor: COLORS.sage },
+  emoji: { fontSize: 32, marginBottom: 4 },
+  emojiLabel: { fontSize: 9, color: COLORS.gray, textAlign: 'center', flexWrap: 'nowrap' },
+  emojiLabelSelected: { color: COLORS.sage, fontWeight: '600' },
+  notesWrapper: { marginTop: 8 },
+  notesInput: { backgroundColor: COLORS.white, borderRadius: 12, padding: 16, fontSize: 15, color: COLORS.dark, minHeight: 80, textAlignVertical: 'top', borderWidth: 1, borderColor: '#E0DDD6' },
+  charCount: { fontSize: 12, color: COLORS.gray, textAlign: 'right', marginTop: 4, marginBottom: 16 },
+  submitButton: { backgroundColor: COLORS.teal, borderRadius: 12, paddingVertical: 16, alignItems: 'center' },
+  submitText: { color: COLORS.white, fontSize: 16, fontWeight: '600' },
+  confirmation: { backgroundColor: COLORS.sage + '22', borderRadius: 12, padding: 20, alignItems: 'center', marginTop: 16, borderWidth: 1, borderColor: COLORS.sage },
+  confirmationText: { fontSize: 16, color: COLORS.sage, fontWeight: '600' },
+  confirmationHigh: { backgroundColor: '#D4715A22', borderColor: '#D4715A' },
+  confirmationTextHigh: { color: '#D4715A' },
 });
-
-const router = useRouter();
-
-const evaluateStress = (level: number): 'low' | 'moderate' | 'high' | 'very_high' => {
-  if (level <= 2) return 'low';
-  if (level === 3) return 'moderate';
-  if (level === 4) return 'high';
-  return 'very_high';
-};

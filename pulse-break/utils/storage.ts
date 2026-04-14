@@ -78,3 +78,19 @@ export async function getWeeklyCheckIns(): Promise<CheckIn[]> {
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
   return all.filter(c => new Date(c.timestamp) >= sevenDaysAgo);
 }
+
+export interface ControlRatio {
+  controllable: number;
+  uncontrollable: number;
+  total: number;
+}
+
+export async function getWeeklyControlRatio(): Promise<ControlRatio> {
+  const all = await getReflections();
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const weekly = all.filter(r => new Date(r.timestamp) >= sevenDaysAgo);
+  const controllable = weekly.filter(r => r.userResponse === 'controllable').length;
+  const uncontrollable = weekly.filter(r => r.userResponse === 'uncontrollable').length;
+  return { controllable, uncontrollable, total: weekly.length };
+}
