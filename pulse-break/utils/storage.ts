@@ -34,3 +34,40 @@ export async function getCheckIns(): Promise<CheckIn[]> {
     return [];
   }
 }
+
+export interface Reflection {
+  id: string;
+  checkInId: string;
+  timestamp: string;
+  promptShown: string;
+  userResponse: 'controllable' | 'uncontrollable';
+}
+
+const REFLECTIONS_KEY = 'pulse_break_reflections';
+
+export async function saveReflection(
+  checkInId: string,
+  promptShown: string,
+  userResponse: 'controllable' | 'uncontrollable'
+): Promise<Reflection> {
+  const entry: Reflection = {
+    id: generateId(),
+    checkInId,
+    timestamp: new Date().toISOString(),
+    promptShown,
+    userResponse,
+  };
+  const existing = await getReflections();
+  const updated = [entry, ...existing];
+  await AsyncStorage.setItem(REFLECTIONS_KEY, JSON.stringify(updated));
+  return entry;
+}
+
+export async function getReflections(): Promise<Reflection[]> {
+  try {
+    const raw = await AsyncStorage.getItem(REFLECTIONS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}

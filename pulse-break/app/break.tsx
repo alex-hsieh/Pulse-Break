@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const COLORS = {
   sage: '#7A9E7E',
@@ -22,6 +22,7 @@ const COLORS = {
 
 export default function BreakScreen() {
   const router = useRouter();
+  const { checkInId } = useLocalSearchParams<{ checkInId: string }>();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,7 +53,7 @@ export default function BreakScreen() {
 
         <TouchableOpacity
           style={styles.startButton}
-          onPress={() => router.push('/reflection' as any)}
+          onPress={() => router.push({ pathname: '/reflection', params: { checkInId } } as any)}
           activeOpacity={0.8}
         >
           <Text style={styles.startButtonText}>Start Break</Text>

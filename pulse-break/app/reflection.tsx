@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { saveReflection } from '../utils/storage';
 import {
   View,
   Text,
@@ -8,7 +10,7 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+
 
 const COLORS = {
   sage: '#7A9E7E',
@@ -44,6 +46,7 @@ type Response = 'controllable' | 'uncontrollable' | null;
 
 export default function ReflectionScreen() {
   const router = useRouter();
+  const { checkInId } = useLocalSearchParams<{ checkInId: string }>();
   const [response, setResponse] = useState<Response>(null);
 
   // Pick random prompt
@@ -51,8 +54,8 @@ export default function ReflectionScreen() {
     PROMPTS[Math.floor(Math.random() * PROMPTS.length)]
   );
 
-  const handleResponse = (type: 'controllable' | 'uncontrollable') => {
-    // TODO: Issue #10 — Javin to save response to AsyncStorage
+  const handleResponse = async (type: 'controllable' | 'uncontrollable') => {
+    await saveReflection(checkInId ?? 'unknown', prompt, type);
     setResponse(type);
   };
 

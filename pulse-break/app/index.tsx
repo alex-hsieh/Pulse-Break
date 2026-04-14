@@ -42,11 +42,11 @@ export default function HomeScreen() {
   const handleSubmit = async () => {
     if (!selected) return;
     const stressCategory = evaluateStress(selected);
-    await saveCheckIn(selected, notes || undefined);
+    const entry = await saveCheckIn(selected, notes || undefined);
     setConfirmed(true);
     if (stressCategory === 'high') {
       setTimeout(() => {
-        router.push('/break' as any);
+        router.push({ pathname: '/break', params: { checkInId: entry.id } } as any);
       }, 2000);
     } else {
       setTimeout(() => {
@@ -158,10 +158,12 @@ const styles = StyleSheet.create({
   },
   emojiButton: {
     alignItems: 'center',
-    padding: 10,
+    padding: 6,
     borderRadius: 12,
     flex: 1,
-    marginHorizontal: 3,
+    marginHorizontal: 2,
+    height: 80,
+    justifyContent: 'center',
   },
   emojiSelected: {
     backgroundColor: COLORS.sage + '33', // sage at 20% opacity
@@ -173,9 +175,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   emojiLabel: {
-    fontSize: 10,
+    fontSize: 9,
     color: COLORS.gray,
     textAlign: 'center',
+    flexWrap: 'nowrap',
   },
   emojiLabelSelected: {
     color: COLORS.sage,
