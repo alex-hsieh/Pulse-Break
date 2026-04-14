@@ -11,7 +11,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-
+//
 const COLORS = {
   sage: '#7A9E7E',
   teal: '#3D8B8B',
