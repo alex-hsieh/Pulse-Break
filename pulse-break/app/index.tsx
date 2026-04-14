@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { saveCheckIn } from '../utils/storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import encouragementData from '../content/encouragement-prompts.json';
 import {
   View,
   Text,
@@ -11,7 +12,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-//
+
 const COLORS = {
   sage: '#7A9E7E',
   teal: '#3D8B8B',
@@ -29,6 +30,14 @@ const EMOJI_SCALE = [
   { level: 4, emoji: '😟', label: 'Stressed' },
   { level: 5, emoji: '😰', label: 'Very Stressed' },
 ];
+
+const ENCOURAGEMENTS: string[] = (encouragementData as { encouragements: string[] }).encouragements;
+
+function getDailyEncouragement(): string {
+  const today = new Date();
+  const dayIndex = today.getFullYear() * 1000 + today.getMonth() * 31 + today.getDate();
+  return ENCOURAGEMENTS[dayIndex % ENCOURAGEMENTS.length];
+}
 
 function evaluateStress(level: number): 'low' | 'moderate' | 'high' | 'very_high' {
   if (level <= 2) return 'low';
@@ -50,6 +59,8 @@ export default function HomeScreen() {
   const [notes, setNotes] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [stressCategory, setStressCategory] = useState<'low' | 'moderate' | 'high' | 'very_high' | null>(null);
+
+  const encouragement = getDailyEncouragement();
 
   useFocusEffect(
     useCallback(() => {
@@ -92,6 +103,13 @@ export default function HomeScreen() {
 
           <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
           <Text style={styles.header}>How are you feeling?</Text>
+
+          {/* Daily encouragement */}
+          {!selected && !confirmed && (
+            <View style={styles.encouragementCard}>
+              <Text style={styles.encouragementText}>{encouragement}</Text>
+            </View>
+          )}
 
           <View style={styles.emojiRow}>
             {EMOJI_SCALE.map(({ level, emoji, label }) => {
@@ -158,7 +176,22 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.cream },
   inner: { flex: 1, paddingHorizontal: 24, paddingTop: 40 },
   greeting: { fontSize: 14, color: COLORS.gray, textTransform: 'capitalize', marginBottom: 4 },
-  header: { fontSize: 28, fontWeight: '700', color: COLORS.dark, marginBottom: 40 },
+  header: { fontSize: 28, fontWeight: '700', color: COLORS.dark, marginBottom: 16 },
+  encouragementCard: {
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: '#E0DDD6',
+  },
+  encouragementText: {
+    fontSize: 14,
+    color: COLORS.teal,
+    fontWeight: '500',
+    lineHeight: 20,
+  },
   emojiRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 32 },
   emojiButton: { alignItems: 'center', padding: 6, borderRadius: 12, flex: 1, marginHorizontal: 2, height: 80, justifyContent: 'center' },
   emojiSelected: { backgroundColor: COLORS.sage + '33', borderWidth: 1.5, borderColor: COLORS.sage },
