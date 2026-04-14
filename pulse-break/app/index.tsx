@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   emojiSelected: {
-    backgroundColor: COLORS.sage + '33', // sage at 20% opacity
+    backgroundColor: COLORS.sage + '33', // sage at 20% opacity.
     borderWidth: 1.5,
     borderColor: COLORS.sage,
   },
