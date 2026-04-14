@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { saveReflection } from '../utils/storage';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import promptData from '../content/reflection-prompts.json';
+
 
 const COLORS = {
   sage: '#7A9E7E',
@@ -42,6 +43,12 @@ export default function ReflectionScreen() {
   };
 
   const followUp = response ? FOLLOW_UPS[response] : null;
+
+  useFocusEffect(
+    useCallback(() => {
+        setResponse(null);
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.container}>

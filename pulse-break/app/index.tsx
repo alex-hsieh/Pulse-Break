@@ -53,12 +53,10 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      return () => {
-        setSelected(null);
-        setNotes('');
-        setConfirmed(false);
-        setStressCategory(null);
-      };
+      setSelected(null);
+      setNotes('');
+      setConfirmed(false);
+      setStressCategory(null);
     }, [])
   );
 
