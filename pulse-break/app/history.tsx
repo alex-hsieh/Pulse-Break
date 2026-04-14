@@ -2,7 +2,14 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
-import { getWeeklyCheckIns, getWeeklyControlRatio, CheckIn, ControlRatio } from '../utils/storage';
+import {
+  getWeeklyCheckIns,
+  getWeeklyControlRatio,
+  getWeeklyWellnessScore,
+  CheckIn,
+  ControlRatio,
+  WellnessScore,
+} from '../utils/storage';
 
 const COLORS = {
   sage: '#7A9E7E',
@@ -18,6 +25,13 @@ const EMOJI_MAP: Record<number, string> = { 1: '😌', 2: '🙂', 3: '😐', 4: 
 const LABEL_MAP: Record<number, string> = { 1: 'Calm', 2: 'Okay', 3: 'Mild', 4: 'Stressed', 5: 'Very Stressed' };
 const LEVEL_COLOR: Record<number, string> = { 1: '#7A9E7E', 2: '#7A9E7E', 3: '#F0A500', 4: '#D4715A', 5: '#D4715A' };
 
+const LABEL_COLOR: Record<WellnessScore['label'], string> = {
+  Building: '#F0A500',
+  Steady: '#7A9E7E',
+  Thriving: '#3D8B8B',
+  Excellent: '#3D8B8B',
+};
+
 function formatDate(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
@@ -32,6 +46,7 @@ export default function HistoryScreen() {
   const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
   const [highCount, setHighCount] = useState(0);
   const [ratio, setRatio] = useState<ControlRatio | null>(null);
+  const [wellness, setWellness] = useState<WellnessScore | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -40,6 +55,7 @@ export default function HistoryScreen() {
         setHighCount(data.filter(c => c.stressLevel >= 4).length);
       });
       getWeeklyControlRatio().then(setRatio);
+      getWeeklyWellnessScore().then(setWellness);
     }, [])
   );
 
@@ -62,6 +78,22 @@ export default function HistoryScreen() {
       <View style={styles.inner}>
         <Text style={styles.header}>This Week</Text>
 
+        {/* Wellness Score */}
+        {wellness && checkIns.length > 0 && (
+          <View style={styles.wellnessCard}>
+            <View style={styles.wellnessLeft}>
+              <Text style={styles.wellnessTitle}>Wellness Score</Text>
+              <Text style={[styles.wellnessLabel, { color: LABEL_COLOR[wellness.label] }]}>
+                {wellness.label}
+              </Text>
+            </View>
+            <Text style={[styles.wellnessScore, { color: LABEL_COLOR[wellness.label] }]}>
+              {wellness.score}
+            </Text>
+          </View>
+        )}
+
+        {/* Stats bar */}
         {checkIns.length > 0 && (
           <View style={styles.statsBar}>
             <View style={styles.stat}>
@@ -81,6 +113,7 @@ export default function HistoryScreen() {
           </View>
         )}
 
+        {/* Control ratio */}
         {ratio && ratio.total > 0 && (
           <View style={styles.ratioCard}>
             <Text style={styles.ratioTitle}>Let Them Breakdown</Text>
@@ -122,6 +155,21 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.cream },
   inner: { flex: 1, paddingHorizontal: 24, paddingTop: 40 },
   header: { fontSize: 28, fontWeight: '700', color: COLORS.dark, marginBottom: 20 },
+  wellnessCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E0DDD6',
+  },
+  wellnessLeft: { flexDirection: 'column' },
+  wellnessTitle: { fontSize: 12, color: COLORS.gray, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 4 },
+  wellnessLabel: { fontSize: 18, fontWeight: '700' },
+  wellnessScore: { fontSize: 48, fontWeight: '800', lineHeight: 52 },
   statsBar: { flexDirection: 'row', backgroundColor: COLORS.white, borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#E0DDD6' },
   stat: { flex: 1, alignItems: 'center' },
   statValue: { fontSize: 22, fontWeight: '700', color: COLORS.dark },

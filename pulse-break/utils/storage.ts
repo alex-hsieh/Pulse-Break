@@ -94,3 +94,43 @@ export async function getWeeklyControlRatio(): Promise<ControlRatio> {
   const uncontrollable = weekly.filter(r => r.userResponse === 'uncontrollable').length;
   return { controllable, uncontrollable, total: weekly.length };
 }
+
+export interface WellnessScore {
+  score: number;
+  label: 'Building' | 'Steady' | 'Thriving' | 'Excellent';
+}
+
+export async function getWeeklyWellnessScore(): Promise<WellnessScore> {
+  const checkIns = await getWeeklyCheckIns();
+  const reflections = await getReflections();
+
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const weeklyReflections = reflections.filter(r => new Date(r.timestamp) >= sevenDaysAgo);
+
+  // 1. Consistency: unique days with check-ins out of 7
+  const uniqueDays = new Set(checkIns.map(c => c.timestamp.slice(0, 10))).size;
+  const consistencyScore = (uniqueDays / 7) * 4; // max 4 pts
+
+  // 2. Stress level: avg stress this week, lower = better
+  const avgStress = checkIns.length > 0
+    ? checkIns.reduce((sum, c) => sum + c.stressLevel, 0) / checkIns.length
+    : 3;
+  const stressScore = ((5 - avgStress) / 4) * 3; // max 3 pts
+
+  // 3. Reflection follow-through: reflections vs check-ins
+  const reflectionScore = checkIns.length > 0
+    ? (weeklyReflections.length / checkIns.length) * 3 // max 3 pts
+    : 0;
+
+  const raw = consistencyScore + stressScore + reflectionScore;
+  const score = Math.round(Math.min(10, Math.max(0, raw)));
+
+  let label: WellnessScore['label'];
+  if (score <= 4) label = 'Building';
+  else if (score <= 6) label = 'Steady';
+  else if (score <= 8) label = 'Thriving';
+  else label = 'Excellent';
+
+  return { score, label };
+}
