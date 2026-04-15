@@ -1,4 +1,4 @@
-# Pulse Break 💚
+# Pulse Break
 
 **Workplace stress management app for Gen Z professionals**
 
@@ -35,11 +35,12 @@ Pulse Break takes a **proactive, behavioral approach**:
 
 ### MVP Scope (2-Week Build)
 Build a functional mobile app prototype demonstrating:
-- ✅ Stress check-in with emoji scale (1-5)
-- ✅ Smart evaluation (low/moderate/high stress detection)
-- ✅ Break recommendation when stress is high
-- ✅ Let Them Theory reflection prompts
-- ✅ Stress history dashboard
+- Stress check-in with emoji scale (1-5)
+- Smart evaluation (low/moderate/high stress detection)
+- Break recommendation when stress is high
+- Let Them Theory reflection prompts
+- Controllable vs. uncontrollable stressor ratio tracking
+- Stress history dashboard
 
 ### Future Vision (Full Product)
 The complete Pulse Break platform would include:
@@ -74,7 +75,7 @@ This project is grounded in verified research on workplace stress and wellness:
 
 ## Development Team
 
-**The Winning Team** — Johnson & Johnson TAP Program, Sprint 1
+**The Winning Team** — Johnson & Johnson TAP Program
 
 | Role | Name | Responsibilities |
 |------|------|------------------|
@@ -91,17 +92,12 @@ This project is grounded in verified research on workplace stress and wellness:
 
 ## Tech Stack
 
-### Current MVP (Day 1 Decision)
+### MVP
 
-**Option A: React Native + Expo (Functional App)**
 - **Framework:** React Native with Expo SDK 51+
-- **Navigation:** React Navigation 6+ (tab-based)
-- **UI Library:** React Native Paper
-- **Data Storage:** AsyncStorage / Expo SecureStore
-- **Charts:** Victory Native or React Native Chart Kit
-- **Language:** JavaScript (with optional TypeScript)
-- **Deployment:** Expo Go for testing, EAS Build for standalone app
-
+- **Routing:** Expo Router (file-based, tab navigation)
+- **Data Storage:** AsyncStorage (local, on-device)
+- **Language:** TypeScript
 
 ### Future Vision Architecture (Azure)
 
@@ -128,17 +124,10 @@ This project is grounded in verified research on workplace stress and wellness:
 
 ### Prerequisites
 
-**For React Native Path:**
 - Node.js 18+ and npm
-- Expo CLI: `npm install -g expo-cli`
-- iOS Simulator (Mac only) or Android Emulator
-- Expo Go app on your phone (optional, for device testing)
+- Expo Go app installed on your phone ([iOS](https://apps.apple.com/app/expo-go/id982107779) / [Android](https://play.google.com/store/apps/details?id=host.exp.exponent))
 
-**For Figma Path:**
-- Figma account (free)
-- Figma desktop app or browser access
-
-### Installation (React Native)
+### Installation
 
 ```bash
 # Clone the repository
@@ -150,35 +139,36 @@ npm install
 
 # Start the development server
 npx expo start
-
-# Scan QR code with Expo Go app (iOS/Android)
-# Or press 'i' for iOS simulator, 'a' for Android emulator
 ```
+
+**Running on your phone:**
+1. Open Expo Go on your phone
+2. Scan the QR code shown in your terminal
+   - iOS: use the default Camera app
+   - Android: use the QR scanner inside Expo Go
+3. App loads on your device
+----
 
 ### Project Structure
-
-```
-pulse-break/
-├── screens/           # Main app screens
-│   ├── HomeScreen.js       # Stress check-in
-│   ├── BreakScreen.js      # Break recommendation
-│   ├── ReflectionScreen.js # Let Them Theory prompts
-│   └── HistoryScreen.js    # Stress history dashboard
-├── components/        # Reusable UI components
-├── utils/            # Helper functions
-│   └── storage.js          # AsyncStorage utilities
-├── data/             # Sample data for testing
-├── content/          # Reflection prompts, copy
-├── docs/             # Project documentation
+`pulse-break/
+├── app/
+│   ├── _layout.tsx         # Tab navigation (Check-In, History)
+│   ├── index.tsx           # Home / stress check-in screen
+│   ├── break.tsx           # Break recommendation screen
+│   ├── reflection.tsx      # Let Them Theory reflection screen
+│   └── history.tsx         # Weekly check-in history dashboard
+├── content/
+│   └── reflection-prompts.json  # Let Them Theory prompt library
+├── utils/
+│   └── storage.ts          # AsyncStorage read/write utilities
+├── docs/                   # Project documentation
 │   ├── MVP_BUILD_SPEC.md
 │   ├── WORK_SPLIT.md
 │   ├── GITHUB_ISSUES.md
 │   ├── AI_PROMPTS.md
 │   └── GITHUB_ISSUES_FOR_BEGINNERS.md
-├── App.js            # Entry point
 ├── package.json
-└── README.md
-```
+└── README.md`
 
 ---
 
@@ -209,8 +199,8 @@ pulse-break/
 - **Encouraging tone** — Supportive, not judgmental
 
 **UX Principles:**
-- **Zero onboarding** — Understand how to use in < 5 seconds
-- **< 3 taps to start break** — Reduce friction when stressed
+- **Zero onboarding** — Understand how to use in under 5 seconds
+- **Under 3 taps to start a break** — Reduce friction when stressed
 - **Progressive disclosure** — Advanced features don't clutter basics
 - **Privacy-first** — User data stays on device (MVP), opt-in sharing (future)
 
@@ -238,20 +228,24 @@ pulse-break/
 ### Manual Testing Checklist
 - [ ] Check-in flow: Tap emoji → see confirmation → data saves
 - [ ] Stress evaluation: High stress (4-5) triggers break screen
-- [ ] Break flow: Start break → see reflection → return home
+- [ ] Break flow: Dynamic break window shows correct next 15-min slot
+- [ ] Break flow: Start break → reflection screen loads
 - [ ] Reflection: Both response options work, data saves correctly
+- [ ] Reflection: Controllable vs. uncontrollable ratio updates in history
 - [ ] History: Past check-ins display, sorted by date
+- [ ] History: Stats bar shows correct check-in and high stress counts
+- [ ] History: Let Them Breakdown ratio bar renders when reflections exist
 - [ ] Data persistence: Restart app, data still there
 
 ### Test on Multiple Devices
-- [ ] iOS simulator (various iPhone sizes)
-- [ ] Android emulator (various screen sizes)
+- [ ] iOS (various iPhone sizes)
+- [ ] Android (various screen sizes)
 - [ ] Real device via Expo Go
 
 ### Known Limitations (MVP)
 - No offline sync conflict resolution
 - No multi-user support
-- No real calendar integration (hardcoded sample data)
+- No real calendar integration (next available slot is calculated, not pulled from a real calendar)
 - Limited to past 7 days of history
 
 ---
@@ -260,12 +254,12 @@ pulse-break/
 
 **Total Duration:** 7-8 days (aggressive sprint)
 
-| Phase | Duration | Deliverable |
-|-------|----------|-------------|
-| **Setup & Decision** | Day 1 | Tech stack chosen, project initialized |
-| **Core Features** | Days 2-5 | Check-in, evaluation, break, reflection working |
-| **Nice-to-Haves** | Days 6-7 | History dashboard, data persistence |
-| **Polish & Demo** | Day 8 | UI refined, demo ready, backup prepared |
+| Phase                | Duration | Deliverable                                         |
+|----------------------|----------|-----------------------------------------------------|
+| **Setup & Decision** | Day 1    | Tech stack chosen, project initialized              |
+| **Core Features**    | Day  2   | Check-in, evaluation, break, reflection working     |
+| **Nice-to-Haves**    | Days 3-4 | History dashboard, data persistence, ratio tracking |
+| **Polish & Demo**    | Day 5    | UI refined, demo ready, backup prepared             |
 
 **Milestone:** Minimum viable demo (check-in → break → reflection) complete by Day 5.
 
@@ -280,7 +274,7 @@ pulse-break/
 - [ ] Demo-ready on real device
 
 ### Presentation Success
-- [ ] Live demo works smoothly (< 3 minutes)
+- [ ] Live demo works smoothly (under 3 minutes)
 - [ ] Audience understands Let Them Theory differentiator
 - [ ] Clear connection between MVP and full vision
 - [ ] Team can answer technical questions confidently
@@ -315,9 +309,7 @@ This is an academic project for J&J's TAP Program. External contributions are no
 
 ## License
 
-This project is developed as part of Johnson & Johnson's Technology Awareness Program and is intended for educational and demonstration purposes only.
-
-**Not for commercial use.**
+This project is developed as part of Johnson & Johnson's Technology Awareness Program and is intended for educational and demonstration purposes only. Not for commercial use.
 
 ---
 
@@ -330,15 +322,12 @@ This project is developed as part of Johnson & Johnson's Technology Awareness Pr
 
 ## Acknowledgments
 
-**Special Thanks:**
 - Johnson & Johnson IT Management for the TAP opportunity
 - TAP Faculty for guidance and mentorship
 - Subject Matter Experts (McKenzie Henry, Zandria Johnson) for industry insights
 - Mel Robbins for the Let Them Theory framework
-- Our families and supporters
 
-**Built with ❤️ by The Winning Team**
 
 ---
 
-**Pulse Break** — Because stress doesn't take a day off, but you can. 💚
+**Pulse Break** — Because stress doesn't take a day off, but you can.
