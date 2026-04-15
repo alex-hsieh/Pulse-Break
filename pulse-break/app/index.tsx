@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { useRouter, useFocusEffect } from 'expo-router';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useRouter, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { saveCheckIn } from '../utils/storage';
 import { COLORS, FONTS } from '../utils/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,6 +16,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Animated,
+  Easing,
 } from 'react-native';
 
 const EMOJI_SCALE = [
@@ -58,13 +60,59 @@ function getTimeOfDay() {
 
 export default function HomeScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{
+    reset?: string;
+    breakDuration?: string;
+    reflectionType?: string;
+  }>();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [stressCategory, setStressCategory] = useState<'low' | 'moderate' | 'high' | 'very_high' | null>(null);
+  const [showResetBanner, setShowResetBanner] = useState(false);
+  const pulseScale = useRef(new Animated.Value(1)).current;
+  const pulseOpacity = useRef(new Animated.Value(0.45)).current;
 
   const encouragement = getDailyEncouragement();
+
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.parallel([
+        Animated.sequence([
+          Animated.timing(pulseScale, {
+            toValue: 1.12,
+            duration: 1400,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseScale, {
+            toValue: 1,
+            duration: 1400,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.sequence([
+          Animated.timing(pulseOpacity, {
+            toValue: 0.18,
+            duration: 1400,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseOpacity, {
+            toValue: 0.45,
+            duration: 1400,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+        ]),
+      ])
+    );
+
+    animation.start();
+    return () => animation.stop();
+  }, [pulseOpacity, pulseScale]);
 
   useFocusEffect(
     useCallback(() => {
@@ -72,12 +120,14 @@ export default function HomeScreen() {
       setNotes('');
       setConfirmed(false);
       setStressCategory(null);
-    }, [])
+      setShowResetBanner(params.reset === '1');
+    }, [params.reset])
   );
 
   const handleSelect = (level: number) => {
     setSelected(level);
     setConfirmed(false);
+    setShowResetBanner(false);
   };
 
   const handleSubmit = async () => {
@@ -128,6 +178,53 @@ export default function HomeScreen() {
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
           >
+            <View style={styles.heroCard}>
+              <View style={styles.heroCopy}>
+                <Text style={styles.heroEyebrow}>Reset with intention</Text>
+                <Text style={styles.heroTitle}>Pause. Reset. Move forward with clarity.</Text>
+                <Text style={styles.heroText}>
+                  Check in, take a guided pulse break, and come back grounded before stress takes over your day.
+                </Text>
+                <View style={styles.heroTags}>
+                  <View style={styles.heroTag}>
+                    <Text style={styles.heroTagText}>Pulse check</Text>
+                  </View>
+                  <View style={styles.heroTag}>
+                    <Text style={styles.heroTagText}>Journal</Text>
+                  </View>
+                  <View style={styles.heroTag}>
+                    <Text style={styles.heroTagText}>Reflect</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.heroVisual}>
+                <Animated.View
+                  style={[
+                    styles.pulseHalo,
+                    {
+                      opacity: pulseOpacity,
+                      transform: [{ scale: pulseScale }],
+                    },
+                  ]}
+                />
+                <View style={styles.pulseCore}>
+                  <Text style={styles.pulseIcon}>🫀</Text>
+                  <Text style={styles.pulseLabel}>Pulse Break</Text>
+                </View>
+              </View>
+            </View>
+
+            {showResetBanner && (
+              <View style={styles.resetBanner}>
+                <Text style={styles.resetBannerTitle}>Pulse break complete</Text>
+                <Text style={styles.resetBannerText}>
+                  {params.reflectionType === 'controllable'
+                    ? `You reset and identified a next step${params.breakDuration ? ` after ${params.breakDuration} seconds` : ''}.`
+                    : `You reset and released what was not yours to carry${params.breakDuration ? ` after ${params.breakDuration} seconds` : ''}.`}
+                </Text>
+              </View>
+            )}
+
             <View style={styles.forecastCard}>
               <Text style={styles.forecastTitle}>Stress Forecast — Today</Text>
               {MOCK_FORECAST.map((item) => (
@@ -224,6 +321,98 @@ const styles = StyleSheet.create({
   stressIndicatorValue: { fontSize: 11, color: 'rgba(255,255,255,0.85)', fontWeight: '600' },
   scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 40 },
+  heroCard: {
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    overflow: 'hidden',
+  },
+  heroCopy: { marginBottom: 18 },
+  heroEyebrow: {
+    fontSize: 11,
+    fontFamily: FONTS.semibold,
+    color: COLORS.tealDeep,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 8,
+  },
+  heroTitle: {
+    fontSize: 28,
+    lineHeight: 34,
+    fontFamily: FONTS.bold,
+    color: COLORS.ink,
+    marginBottom: 10,
+  },
+  heroText: {
+    fontSize: 14,
+    lineHeight: 22,
+    color: COLORS.inkMid,
+    marginBottom: 14,
+  },
+  heroTags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  heroTag: {
+    backgroundColor: COLORS.tealPale,
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+  },
+  heroTagText: {
+    fontSize: 12,
+    fontFamily: FONTS.semibold,
+    color: COLORS.tealDeep,
+  },
+  heroVisual: {
+    height: 170,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pulseHalo: {
+    position: 'absolute',
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: COLORS.teal,
+  },
+  pulseCore: {
+    width: 112,
+    height: 112,
+    borderRadius: 56,
+    backgroundColor: COLORS.sagePale,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pulseIcon: { fontSize: 34, marginBottom: 4 },
+  pulseLabel: {
+    fontSize: 12,
+    fontFamily: FONTS.semibold,
+    color: COLORS.tealDeep,
+  },
+  resetBanner: {
+    backgroundColor: COLORS.sagePale,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: COLORS.sage,
+  },
+  resetBannerTitle: {
+    fontSize: 14,
+    fontFamily: FONTS.bold,
+    color: COLORS.sageDeep,
+    marginBottom: 4,
+  },
+  resetBannerText: {
+    fontSize: 13,
+    lineHeight: 20,
+    color: COLORS.inkMid,
+  },
   forecastCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 28, borderWidth: 1, borderColor: '#E0DDD6' },
   forecastTitle: { fontSize: 11, fontFamily: FONTS.semibold, color: COLORS.inkSoft, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 12 },
   forecastRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 8 },

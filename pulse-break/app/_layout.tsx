@@ -75,7 +75,6 @@ export default function RootLayout() {
         <Tabs.Screen name="break" options={{ href: null }} />
         <Tabs.Screen name="journal" options={{ href: null }} />
         <Tabs.Screen name="reflection" options={{ href: null }} />
-        <Tabs.Screen name="return" options={{ href: null }} />
       </Tabs>
     </SafeAreaProvider>
   );

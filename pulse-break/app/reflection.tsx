@@ -48,8 +48,13 @@ export default function ReflectionScreen() {
 
   const handleDone = () => {
     router.push({
-      pathname: '/return',
-      params: { stressCategory, breakDuration, reflectionType: response ?? 'uncontrollable' },
+      pathname: '/',
+      params: {
+        reset: '1',
+        stressCategory,
+        breakDuration,
+        reflectionType: response ?? 'uncontrollable',
+      },
     } as any);
   };
 
@@ -95,7 +100,7 @@ export default function ReflectionScreen() {
 
         {response && (
           <TouchableOpacity style={styles.doneButton} onPress={handleDone} activeOpacity={0.8}>
-            <Text style={styles.doneText}>See My Results</Text>
+            <Text style={styles.doneText}>Back to Home</Text>
           </TouchableOpacity>
         )}
       </ScrollView>
