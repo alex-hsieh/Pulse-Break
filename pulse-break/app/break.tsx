@@ -88,6 +88,16 @@ function getNextBreakWindow(): string {
   return `${fmt(start)} — ${fmt(end)}`;
 }
 
+function toJournal(
+  router: ReturnType<typeof useRouter>,
+  params: { checkInId?: string; stressCategory: string; breakDuration: string }
+) {
+  router.push({
+    pathname: '/journal',
+    params,
+  } as any);
+}
+
 export default function BreakScreen() {
   const router = useRouter();
   const { checkInId, stressCategory } = useLocalSearchParams<{ checkInId: string; stressCategory: string }>();
@@ -138,7 +148,11 @@ export default function BreakScreen() {
           if (s <= 1) {
             clearInterval(intervalRef.current!);
             stopBreathing();
-            router.push({ pathname: '/reflection', params: { checkInId } } as any);
+            toJournal(router, {
+              checkInId,
+              stressCategory: category,
+              breakDuration: String(config.duration),
+            });
             return 0;
           }
           return s - 1;
@@ -212,7 +226,11 @@ export default function BreakScreen() {
   function handleDoneEarly() {
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopBreathing();
-    router.push({ pathname: '/reflection', params: { checkInId, stressCategory: category, breakDuration: String(config.duration - secondsLeft) } } as any);
+    toJournal(router, {
+      checkInId,
+      stressCategory: category,
+      breakDuration: String(config.duration - secondsLeft),
+    });
   }
 
   function toggleCheck(i: number) {

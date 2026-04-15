@@ -72,6 +72,48 @@ export async function getReflections(): Promise<Reflection[]> {
   }
 }
 
+export interface JournalEntry {
+  id: string;
+  checkInId: string;
+  timestamp: string;
+  title?: string;
+  body: string;
+  moodTag?: 'release' | 'reframe' | 'gratitude' | 'next_step';
+}
+
+const JOURNALS_KEY = 'pulse_break_journals';
+
+export async function saveJournalEntry(
+  checkInId: string,
+  body: string,
+  options?: {
+    title?: string;
+    moodTag?: JournalEntry['moodTag'];
+  }
+): Promise<JournalEntry> {
+  const entry: JournalEntry = {
+    id: generateId(),
+    checkInId,
+    timestamp: new Date().toISOString(),
+    title: options?.title,
+    body,
+    moodTag: options?.moodTag,
+  };
+  const existing = await getJournalEntries();
+  const updated = [entry, ...existing];
+  await AsyncStorage.setItem(JOURNALS_KEY, JSON.stringify(updated));
+  return entry;
+}
+
+export async function getJournalEntries(): Promise<JournalEntry[]> {
+  try {
+    const raw = await AsyncStorage.getItem(JOURNALS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function getWeeklyCheckIns(): Promise<CheckIn[]> {
   const all = await getCheckIns();
   const sevenDaysAgo = new Date();
