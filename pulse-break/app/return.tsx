@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing, ScrollView } from 'react-native';
 
@@ -31,7 +30,6 @@ const DURATION_LABEL: Record<string, string> = {
 
 export default function ReturnScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const { stressCategory, reflectionType } = useLocalSearchParams<{
     stressCategory: string;
     reflectionType: string;
@@ -57,7 +55,7 @@ export default function ReturnScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={[styles.headerBar, { paddingTop: insets.top + 16 }]}>
+      <View style={styles.headerBar}>
         <Text style={styles.headerCheck}>✅</Text>
         <View>
           <Text style={styles.headerTitle}>You're Back on Track</Text>
