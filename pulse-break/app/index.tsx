@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { saveCheckIn } from '../utils/storage';
+import { COLORS, FONTS } from '../utils/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import encouragementData from '../content/encouragement-prompts.json';
@@ -17,19 +18,6 @@ import {
   Platform,
 } from 'react-native';
 
-const COLORS = {
-  sage: '#7A9E7E',
-  sagePale: '#EAF2EB',
-  teal: '#3D8B8B',
-  coral: '#D4715A',
-  amber: '#D4A055',
-  cream: '#F8F5EF',
-  ink: '#1C2B2B',
-  inkMid: '#3D5050',
-  inkSoft: '#7A9090',
-  white: '#FDFCFA',
-};
-
 const EMOJI_SCALE = [
   { level: 1, emoji: '😌', label: 'Calm' },
   { level: 2, emoji: '🙂', label: 'Okay' },
@@ -44,8 +32,8 @@ const MOCK_FORECAST = [
   { time: '9 AM',  label: 'Team standup',    pct: 28, color: '#7A9E7E' },
   { time: '11 AM', label: 'Deep work block', pct: 35, color: '#7A9E7E' },
   { time: '1 PM',  label: 'Lunch / recharge',pct: 20, color: '#7A9E7E' },
-  { time: '2 PM',  label: 'Sprint review',   pct: 62, color: '#D4A055' },
-  { time: '4 PM',  label: 'Deadline crunch', pct: 85, color: '#D4715A' },
+  { time: '2 PM',  label: 'Sprint review',   pct: 62, color: COLORS.tealDeep },
+  { time: '4 PM',  label: 'Deadline crunch', pct: 85, color: COLORS.sageDeep },
 ];
 
 function getDailyEncouragement(): string {
@@ -218,7 +206,7 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.sage },
+  container: { flex: 1, backgroundColor: COLORS.teal },
   headerBar: {
     backgroundColor: COLORS.sage,
     paddingHorizontal: 24,
@@ -227,8 +215,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  appName: { fontSize: 11, fontWeight: '600', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 2 },
-  greeting: { fontSize: 20, fontWeight: '600', color: COLORS.white },
+  appName: { fontSize: 11, fontFamily: FONTS.semibold, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 2 },
+  greeting: { fontSize: 20, fontFamily: FONTS.semibold, color: COLORS.white },
   stressIndicator: { alignItems: 'flex-end', gap: 4 },
   stressIndicatorLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 0.8 },
   stressBarMini: { width: 80, height: 5, backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 99, overflow: 'hidden' },
@@ -237,28 +225,28 @@ const styles = StyleSheet.create({
   scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 40 },
   forecastCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 28, borderWidth: 1, borderColor: '#E0DDD6' },
-  forecastTitle: { fontSize: 11, fontWeight: '600', color: COLORS.inkSoft, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 12 },
+  forecastTitle: { fontSize: 11, fontFamily: FONTS.semibold, color: COLORS.inkSoft, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 12 },
   forecastRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 8 },
   forecastTime: { fontSize: 11, color: COLORS.inkSoft, width: 36 },
   forecastBarBg: { width: 100, height: 6, backgroundColor: '#E0DDD6', borderRadius: 99, overflow: 'hidden' },
   forecastBarFill: { height: '100%', borderRadius: 99 },
   forecastLabel: { fontSize: 12, color: COLORS.inkMid, flex: 1 },
   forecastNote: { fontSize: 10, color: COLORS.inkSoft, fontStyle: 'italic', marginTop: 8, textAlign: 'right' },
-  header: { fontSize: 26, fontWeight: '700', color: COLORS.ink, marginBottom: 16 },
+  header: { fontSize: 26, fontFamily: FONTS.bold, color: COLORS.ink, marginBottom: 16 },
   emojiRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 32 },
   emojiButton: { alignItems: 'center', padding: 6, borderRadius: 12, flex: 1, marginHorizontal: 2, height: 80, justifyContent: 'center' },
   emojiSelected: { backgroundColor: COLORS.sage + '33', borderWidth: 1.5, borderColor: COLORS.sage },
   emoji: { fontSize: 32, marginBottom: 4 },
   emojiLabel: { fontSize: 9, color: COLORS.inkSoft, textAlign: 'center' },
-  emojiLabelSelected: { color: COLORS.sage, fontWeight: '600' },
+  emojiLabelSelected: { color: COLORS.sageDeep, fontFamily: FONTS.semibold },
   notesWrapper: { marginTop: 8 },
   notesInput: { backgroundColor: COLORS.white, borderRadius: 12, padding: 16, fontSize: 15, color: COLORS.ink, minHeight: 80, textAlignVertical: 'top', borderWidth: 1, borderColor: '#E0DDD6' },
   charCount: { fontSize: 12, color: COLORS.inkSoft, textAlign: 'right', marginTop: 4, marginBottom: 16 },
   submitButton: { backgroundColor: COLORS.teal, borderRadius: 12, paddingVertical: 16, alignItems: 'center' },
-  submitText: { color: COLORS.white, fontSize: 16, fontWeight: '600' },
+  submitText: { color: COLORS.white, fontSize: 16, fontFamily: FONTS.semibold },
   quote: { marginTop: 20, fontSize: 14, fontStyle: 'italic', color: COLORS.inkSoft, textAlign: 'center', lineHeight: 22, paddingHorizontal: 8 },
   confirmation: { backgroundColor: COLORS.sage + '22', borderRadius: 12, padding: 20, alignItems: 'center', marginTop: 16, borderWidth: 1, borderColor: COLORS.sage },
-  confirmationText: { fontSize: 16, color: COLORS.sage, fontWeight: '600' },
+  confirmationText: { fontSize: 16, color: COLORS.sageDeep, fontFamily: FONTS.semibold },
   confirmationHigh: { backgroundColor: '#D4715A22', borderColor: '#D4715A' },
   confirmationTextHigh: { color: '#D4715A' },
   confirmationModerate: { backgroundColor: '#D4A05522', borderColor: '#D4A055' },

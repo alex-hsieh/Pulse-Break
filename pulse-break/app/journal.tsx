@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { saveJournalEntry } from '../utils/storage';
-import { COLORS, RADIUS, SHADOW, SPACING } from '../utils/theme';
+import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../utils/theme';
 
 const JOURNAL_PROMPTS = [
   {
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   eyebrow: {
     fontSize: 12,
     color: COLORS.tealDeep,
-    fontWeight: '700',
+    fontFamily: FONTS.semibold,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
     marginBottom: 8,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 31,
     lineHeight: 38,
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
     color: COLORS.ink,
     marginBottom: 10,
   },
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   promptChipText: {
     color: COLORS.inkSoft,
     fontSize: 13,
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
   },
   promptChipTextActive: {
     color: COLORS.white,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 20,
     lineHeight: 28,
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
     color: COLORS.ink,
     marginBottom: 8,
   },
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   },
   editorLabel: {
     fontSize: 14,
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
     color: COLORS.ink,
     marginBottom: 10,
   },
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   noteTitle: {
     fontSize: 12,
     color: COLORS.tealDeep,
-    fontWeight: '700',
+    fontFamily: FONTS.semibold,
     textTransform: 'uppercase',
     letterSpacing: 0.7,
     marginBottom: 8,
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     color: COLORS.white,
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: FONTS.bold,
   },
   secondaryButton: {
     alignItems: 'center',

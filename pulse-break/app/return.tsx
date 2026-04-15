@@ -3,19 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing, ScrollView } from 'react-native';
-
-const COLORS = {
-  sage: '#7A9E7E',
-  sagePale: '#EAF2EB',
-  teal: '#3D8B8B',
-  tealPale: '#E4F2F2',
-  coral: '#D4715A',
-  cream: '#F8F5EF',
-  ink: '#1C2B2B',
-  inkMid: '#3D5050',
-  inkSoft: '#7A9090',
-  white: '#FDFCFA',
-};
+import { COLORS, FONTS } from '../utils/theme';
 
 const STRESS_DROP: Record<string, { before: number; after: number }> = {
   moderate:  { before: 55, after: 22 },
@@ -137,7 +125,7 @@ const styles = StyleSheet.create({
     gap: 14,
   },
   headerCheck: { fontSize: 28 },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: COLORS.white },
+  headerTitle: { fontSize: 18, fontFamily: FONTS.bold, color: COLORS.white },
   headerSub: { fontSize: 13, color: 'rgba(255,255,255,0.75)', marginTop: 2 },
   scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 28, paddingBottom: 48 },
@@ -145,21 +133,21 @@ const styles = StyleSheet.create({
   ringWrap: { marginBottom: 8 },
   ringOuter: { width: 140, height: 140, borderRadius: 70, borderWidth: 6, justifyContent: 'center', alignItems: 'center' },
   ringInner: { alignItems: 'center' },
-  ringValue: { fontSize: 36, fontWeight: '800' },
+  ringValue: { fontSize: 36, fontFamily: FONTS.bold },
   ringLabel: { fontSize: 12, color: COLORS.inkSoft, marginTop: 2 },
   ringCaption: { fontSize: 13, color: COLORS.inkSoft, textAlign: 'center' },
   statsRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
   statCard: { flex: 1, backgroundColor: COLORS.white, borderRadius: 12, padding: 14, alignItems: 'center', borderWidth: 1, borderColor: '#E0DDD6' },
-  statValue: { fontSize: 22, fontWeight: '800', marginBottom: 4 },
+  statValue: { fontSize: 22, fontFamily: FONTS.bold, marginBottom: 4 },
   statLabel: { fontSize: 11, color: COLORS.inkSoft, textAlign: 'center' },
   mlCard: { backgroundColor: COLORS.tealPale, borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: COLORS.teal + '44' },
-  mlTitle: { fontSize: 13, fontWeight: '700', color: COLORS.teal, marginBottom: 6 },
+  mlTitle: { fontSize: 13, fontFamily: FONTS.bold, color: COLORS.tealDeep, marginBottom: 6 },
   mlText: { fontSize: 14, color: COLORS.inkMid, lineHeight: 21 },
   recapCard: { backgroundColor: COLORS.white, borderRadius: 12, padding: 16, marginBottom: 24, borderWidth: 1, borderColor: '#E0DDD6' },
-  recapTitle: { fontSize: 11, color: COLORS.inkSoft, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 12 },
+  recapTitle: { fontSize: 11, color: COLORS.inkSoft, fontFamily: FONTS.semibold, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 12 },
   recapRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 10 },
   recapIcon: { fontSize: 16, marginTop: 1 },
   recapText: { fontSize: 14, color: COLORS.inkMid, flex: 1, lineHeight: 20 },
   ctaButton: { backgroundColor: COLORS.ink, borderRadius: 12, paddingVertical: 18, alignItems: 'center' },
-  ctaText: { color: COLORS.white, fontSize: 16, fontWeight: '700' },
+  ctaText: { color: COLORS.white, fontSize: 16, fontFamily: FONTS.bold },
 });

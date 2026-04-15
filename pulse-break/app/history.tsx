@@ -10,26 +10,17 @@ import {
   ControlRatio,
   WellnessScore,
 } from '../utils/storage';
-
-const COLORS = {
-  sage: '#7A9E7E',
-  teal: '#3D8B8B',
-  coral: '#D4715A',
-  cream: '#F8F5EF',
-  dark: '#2D3142',
-  gray: '#9A9CB0',
-  white: '#FFFFFF',
-};
+import { COLORS, FONTS, RADIUS, SHADOW, SPACING } from '../utils/theme';
 
 const EMOJI_MAP: Record<number, string> = { 1: '😌', 2: '🙂', 3: '😐', 4: '😟', 5: '😰' };
 const LABEL_MAP: Record<number, string> = { 1: 'Calm', 2: 'Okay', 3: 'Mild', 4: 'Stressed', 5: 'Very Stressed' };
-const LEVEL_COLOR: Record<number, string> = { 1: '#7A9E7E', 2: '#7A9E7E', 3: '#F0A500', 4: '#D4715A', 5: '#D4715A' };
+const LEVEL_COLOR: Record<number, string> = { 1: COLORS.sage, 2: COLORS.sage, 3: COLORS.tealDeep, 4: COLORS.tealDeep, 5: COLORS.tealDeep };
 
 const LABEL_COLOR: Record<WellnessScore['label'], string> = {
-  Building: '#F0A500',
-  Steady: '#7A9E7E',
-  Thriving: '#3D8B8B',
-  Excellent: '#3D8B8B',
+  Building: COLORS.sageDeep,
+  Steady: COLORS.sage,
+  Thriving: COLORS.tealDeep,
+  Excellent: COLORS.tealDeep,
 };
 
 function formatDate(iso: string): string {
@@ -76,9 +67,14 @@ export default function HistoryScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inner}>
-        <Text style={styles.header}>This Week</Text>
+        <View style={styles.heroCard}>
+          <Text style={styles.eyebrow}>Weekly view</Text>
+          <Text style={styles.header}>Your stress patterns this week</Text>
+          <Text style={styles.subheader}>
+            Review your check-ins, spot the high-stress moments, and track what you can control.
+          </Text>
+        </View>
 
-        {/* Wellness Score */}
         {wellness && checkIns.length > 0 && (
           <View style={styles.wellnessCard}>
             <View style={styles.wellnessLeft}>
@@ -93,7 +89,6 @@ export default function HistoryScreen() {
           </View>
         )}
 
-        {/* Stats bar */}
         {checkIns.length > 0 && (
           <View style={styles.statsBar}>
             <View style={styles.stat}>
@@ -113,7 +108,6 @@ export default function HistoryScreen() {
           </View>
         )}
 
-        {/* Control ratio */}
         {ratio && ratio.total > 0 && (
           <View style={styles.ratioCard}>
             <Text style={styles.ratioTitle}>Let Them Breakdown</Text>
@@ -153,46 +147,57 @@ export default function HistoryScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.cream },
-  inner: { flex: 1, paddingHorizontal: 24, paddingTop: 40 },
-  header: { fontSize: 28, fontWeight: '700', color: COLORS.dark, marginBottom: 20 },
+  inner: { flex: 1, paddingHorizontal: SPACING.xl, paddingTop: SPACING.lg },
+  heroCard: {
+    backgroundColor: COLORS.paper,
+    borderRadius: RADIUS.lg,
+    padding: SPACING.xl,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    marginBottom: SPACING.lg,
+    ...SHADOW,
+  },
+  eyebrow: { fontSize: 12, color: COLORS.tealDeep, fontFamily: FONTS.semibold, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 8 },
+  header: { fontSize: 31, fontFamily: FONTS.bold, color: COLORS.ink, lineHeight: 38, marginBottom: 10 },
+  subheader: { fontSize: 15, color: COLORS.inkSoft, lineHeight: 22 },
   wellnessCard: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: COLORS.white,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    borderRadius: RADIUS.md,
+    padding: SPACING.lg,
+    marginBottom: SPACING.sm,
     borderWidth: 1,
-    borderColor: '#E0DDD6',
+    borderColor: COLORS.line,
   },
   wellnessLeft: { flexDirection: 'column' },
-  wellnessTitle: { fontSize: 12, color: COLORS.gray, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 4 },
-  wellnessLabel: { fontSize: 18, fontWeight: '700' },
-  wellnessScore: { fontSize: 48, fontWeight: '800', lineHeight: 52 },
-  statsBar: { flexDirection: 'row', backgroundColor: COLORS.white, borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#E0DDD6' },
+  wellnessTitle: { fontSize: 12, color: COLORS.inkSoft, fontFamily: FONTS.semibold, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 4 },
+  wellnessLabel: { fontSize: 18, fontFamily: FONTS.bold },
+  wellnessScore: { fontSize: 48, fontFamily: FONTS.bold, lineHeight: 52 },
+  statsBar: { flexDirection: 'row', backgroundColor: COLORS.white, borderRadius: RADIUS.md, padding: SPACING.lg, marginBottom: SPACING.sm, borderWidth: 1, borderColor: COLORS.line },
   stat: { flex: 1, alignItems: 'center' },
-  statValue: { fontSize: 22, fontWeight: '700', color: COLORS.dark },
-  statLabel: { fontSize: 11, color: COLORS.gray, marginTop: 2 },
-  statDivider: { width: 1, backgroundColor: '#E0DDD6' },
-  ratioCard: { backgroundColor: COLORS.white, borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#E0DDD6' },
-  ratioTitle: { fontSize: 12, color: COLORS.gray, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 10 },
+  statValue: { fontSize: 24, fontFamily: FONTS.bold, color: COLORS.ink },
+  statLabel: { fontSize: 11, color: COLORS.inkSoft, marginTop: 2 },
+  statDivider: { width: 1, backgroundColor: COLORS.line },
+  ratioCard: { backgroundColor: COLORS.white, borderRadius: RADIUS.md, padding: SPACING.lg, marginBottom: SPACING.lg, borderWidth: 1, borderColor: COLORS.line },
+  ratioTitle: { fontSize: 12, color: COLORS.inkSoft, fontFamily: FONTS.semibold, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 10 },
   ratioRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   ratioStat: { alignItems: 'center', minWidth: 44 },
-  ratioValue: { fontSize: 18, fontWeight: '700' },
-  ratioLabel: { fontSize: 10, color: COLORS.gray, marginTop: 2 },
-  ratioBar: { flex: 1, height: 8, borderRadius: 4, flexDirection: 'row', overflow: 'hidden', backgroundColor: '#E0DDD6' },
+  ratioValue: { fontSize: 18, fontFamily: FONTS.bold },
+  ratioLabel: { fontSize: 10, color: COLORS.inkSoft, marginTop: 2 },
+  ratioBar: { flex: 1, height: 8, borderRadius: 4, flexDirection: 'row', overflow: 'hidden', backgroundColor: COLORS.line },
   ratioFill: { height: '100%' },
-  card: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.white, borderRadius: 12, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: '#E0DDD6' },
+  card: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.white, borderRadius: RADIUS.md, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: COLORS.line },
   cardLeft: { marginRight: 12 },
   cardEmoji: { fontSize: 28 },
   cardMiddle: { flex: 1 },
-  cardLabel: { fontSize: 15, fontWeight: '600', marginBottom: 2 },
-  cardNotes: { fontSize: 13, color: COLORS.gray, marginBottom: 2 },
-  cardDate: { fontSize: 12, color: COLORS.gray },
+  cardLabel: { fontSize: 15, fontFamily: FONTS.semibold, marginBottom: 2 },
+  cardNotes: { fontSize: 13, color: COLORS.inkSoft, marginBottom: 2 },
+  cardDate: { fontSize: 12, color: COLORS.inkSoft },
   cardDot: { width: 8, height: 8, borderRadius: 4, marginLeft: 8 },
   emptyContainer: { flex: 1 },
   empty: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 80 },
-  emptyText: { fontSize: 18, fontWeight: '600', color: COLORS.dark, marginBottom: 4 },
-  emptySubtext: { fontSize: 15, color: COLORS.gray },
+  emptyText: { fontSize: 18, fontFamily: FONTS.semibold, color: COLORS.ink, marginBottom: 4 },
+  emptySubtext: { fontSize: 15, color: COLORS.inkSoft },
 });

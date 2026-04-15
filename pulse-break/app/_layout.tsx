@@ -1,9 +1,39 @@
+import { useEffect } from 'react';
 import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
+import { Text, TextInput } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { COLORS } from '../utils/theme';
+import { useFonts } from 'expo-font';
+import {
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+} from '@expo-google-fonts/poppins';
+import { COLORS, FONTS } from '../utils/theme';
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+  });
+
+  useEffect(() => {
+    const TextComponent = Text as typeof Text & { defaultProps?: { style?: unknown } };
+    const TextInputComponent = TextInput as typeof TextInput & { defaultProps?: { style?: unknown } };
+
+    TextComponent.defaultProps = TextComponent.defaultProps || {};
+    TextComponent.defaultProps.style = [{ fontFamily: FONTS.regular }, TextComponent.defaultProps.style];
+
+    TextInputComponent.defaultProps = TextInputComponent.defaultProps || {};
+    TextInputComponent.defaultProps.style = [{ fontFamily: FONTS.regular }, TextInputComponent.defaultProps.style];
+  }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
       <Tabs
@@ -20,7 +50,7 @@ export default function RootLayout() {
           },
           tabBarLabelStyle: {
             fontSize: 12,
-            fontWeight: '700',
+            fontFamily: FONTS.semibold,
           },
         }}
       >
