@@ -57,7 +57,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Check-In',
+            title: 'Home',
             tabBarIcon: ({ color, size }) => (
               <Text style={{ fontSize: size, color }}>🫀</Text>
             ),
@@ -73,6 +73,7 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen name="break" options={{ href: null }} />
+        <Tabs.Screen name="check-in" options={{ href: null }} />
         <Tabs.Screen name="journal" options={{ href: null }} />
         <Tabs.Screen name="reflection" options={{ href: null }} />
       </Tabs>
