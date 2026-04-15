@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { saveCheckIn } from '../utils/storage';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import encouragementData from '../content/encouragement-prompts.json';
 import {
@@ -69,6 +70,7 @@ function getTimeOfDay() {
 
 export default function HomeScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [confirmed, setConfirmed] = useState(false);
@@ -118,7 +120,7 @@ export default function HomeScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={0}
         >
-          <View style={[styles.headerBar, { paddingTop: 14 }]}>
+          <View style={[styles.headerBar, { paddingTop: insets.top + 14 }]}>
             <View>
               <Text style={styles.appName}>Pulse Break</Text>
               <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
@@ -171,8 +173,6 @@ export default function HomeScreen() {
               })}
             </View>
 
-            <Text style={styles.quote}>"{encouragement}"</Text>
-
             {selected && !confirmed && (
               <View style={styles.notesWrapper}>
                 <TextInput
@@ -188,6 +188,7 @@ export default function HomeScreen() {
                 <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                   <Text style={styles.submitText}>Log Check-In</Text>
                 </TouchableOpacity>
+                <Text style={styles.quote}>"{encouragement}"</Text>
               </View>
             )}
 

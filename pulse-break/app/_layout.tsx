@@ -10,7 +10,6 @@ export default function RootLayout() {
         <Tabs.Screen name="history" options={{ title: 'History', tabBarIcon: ({ color, size }) => <Text style={{ fontSize: size, color }}>📋</Text> }} />
         <Tabs.Screen name="break" options={{ href: null }} />
         <Tabs.Screen name="reflection" options={{ href: null }} />
-        <Tabs.Screen name="return" options={{ href: null }} />
       </Tabs>
     </SafeAreaProvider>
   );

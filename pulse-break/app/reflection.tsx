@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { saveReflection } from '../utils/storage';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
@@ -36,6 +37,7 @@ type Response = 'controllable' | 'uncontrollable' | null;
 
 export default function ReflectionScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { checkInId, stressCategory, breakDuration } = useLocalSearchParams<{
     checkInId: string;
     stressCategory: string;
@@ -66,7 +68,7 @@ export default function ReflectionScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerBar}>
+      <View style={[styles.headerBar, { paddingTop: insets.top + 14 }]}>
         <Text style={styles.headerEyebrow}>Reflection</Text>
         <Text style={styles.headerSub}>Let Them Theory</Text>
       </View>
