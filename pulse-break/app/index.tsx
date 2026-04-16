@@ -67,7 +67,7 @@ export default function LandingScreen() {
             <SvgXml xml={LOGO_SVG} width={240} height={78} />
             <Text style={styles.tagline}>Your daily stress companion.</Text>
             <Text style={styles.subTagline}>
-              Check in, breathe, and reflect — in under a minute.
+              Check in, breathe, and reflect in under a minute.
             </Text>
           </View>
 
