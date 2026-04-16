@@ -211,7 +211,7 @@ export default function BreakScreen() {
   function handleSkip() {
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopBreathing();
-    router.push('/' as any);
+    router.push('/check_in' as any);
   }
 
   function handleDoneEarly() {

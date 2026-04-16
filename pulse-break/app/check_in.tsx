@@ -141,6 +141,9 @@ export default function HomeScreen() {
               <View>
                 <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
               </View>
+              <TouchableOpacity onPress={() => router.push('/' as any)} style={styles.logoutButton} activeOpacity={0.7}>
+                <Text style={styles.logoutText}>Log Out</Text>
+              </TouchableOpacity>
               <View style={styles.stressIndicator}>
                 <Text style={styles.stressIndicatorLabel}>Today</Text>
                 <View style={styles.stressBarMini}>
@@ -259,6 +262,8 @@ const styles = StyleSheet.create({
   stressBarMini: { width: 80, height: 5, backgroundColor: 'rgba(20, 13, 13, 0.25)', borderRadius: 99, overflow: 'hidden' },
   stressBarFill: { height: '100%', backgroundColor: COLORS.teal, borderRadius: 99 },
   stressIndicatorValue: { fontSize: 11, color: 'rgba(61, 139, 139, 1)', fontWeight: '600' },
+  logoutButton: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, borderWidth: 1, borderColor: 'rgba(61,139,139,0.4)' },
+  logoutText: { fontSize: 11, color: COLORS.tealDark, fontWeight: '600' },
   scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 20 },
   forecastCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 28, borderWidth: 1, borderColor: '#E0DDD6' },
