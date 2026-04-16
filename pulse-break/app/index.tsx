@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   charCount: { fontSize: 12, color: COLORS.inkSoft, textAlign: 'right', marginTop: 4, marginBottom: 8 },
   submitButton: { backgroundColor: COLORS.teal, borderRadius: 12, paddingVertical: 16, alignItems: 'center' },
   submitText: { color: COLORS.white, fontSize: 16, fontWeight: '600' },
-  quote: { marginTop: 5, fontSize: 14, fontStyle: 'italic', color: COLORS.inkSoft, textAlign: 'center', lineHeight: 20, paddingHorizontal: 8 },
+  quote: { marginTop: 12, fontSize: 14, fontStyle: 'italic', color: COLORS.inkSoft, textAlign: 'center', lineHeight: 20, paddingHorizontal: 8 },
   confirmation: { backgroundColor: COLORS.sage + '22', borderRadius: 12, padding: 20, alignItems: 'center', marginTop: 8, borderWidth: 1, borderColor: COLORS.sage },
   confirmationText: { fontSize: 16, color: COLORS.sage, fontWeight: '600' },
   confirmationHigh: { backgroundColor: '#D4715A22', borderColor: '#D4715A' },
