@@ -70,7 +70,6 @@ const TIER2_ROTATING_TIPS = [
 const TIER3_CHECKLIST = [
   { icon: '🚶', text: 'Step away from your desk' },
   { icon: '💧', text: 'Drink water — skip the caffeine' },
-  { icon: '📵', text: 'Put your phone face down' },
   { icon: '🌬️', text: 'Box breathe: 4s in, hold, out, hold' },
   { icon: '☀️', text: 'Get outside or near a window' },
 ];
@@ -465,7 +464,7 @@ const styles = StyleSheet.create({
   rotatingTipCard: { backgroundColor: COLORS.tealPale, borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: COLORS.teal + '44', flexDirection: 'row', alignItems: 'center', gap: 12 },
   rotatingTipIcon: { fontSize: 24 },
   rotatingTipText: { fontSize: 15, color: COLORS.inkMid, flex: 1, fontWeight: '500' },
-  disconnectCard: { backgroundColor: COLORS.coralPale, borderRadius: 14, padding: 20, marginBottom: 16, borderWidth: 1, borderColor: COLORS.coral + '44', alignItems: 'center' },
+  disconnectCard: { backgroundColor: COLORS.coralPale, borderRadius: 14, padding: 5, marginBottom: 16, borderWidth: 1, borderColor: COLORS.coral + '44', alignItems: 'center' },
   disconnectIcon: { fontSize: 36, marginBottom: 8 },
   disconnectTitle: { fontSize: 18, fontWeight: '700', color: COLORS.coral, marginBottom: 4 },
   disconnectSub: { fontSize: 13, color: COLORS.inkMid, textAlign: 'center', lineHeight: 20 },

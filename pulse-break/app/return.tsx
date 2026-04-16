@@ -118,7 +118,7 @@ export default function ReturnScreen() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.ctaButton} onPress={() => router.push('/' as any)} activeOpacity={0.8}>
+        <TouchableOpacity style={styles.ctaButton} onPress={() => router.push('/check_in')} activeOpacity={0.8}>
           <Text style={styles.ctaText}>Return to Work — You've Got This</Text>
         </TouchableOpacity>
       </ScrollView>
