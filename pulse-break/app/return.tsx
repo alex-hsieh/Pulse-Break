@@ -17,30 +17,81 @@ const COLORS = {
   white: '#FDFCFA',
 };
 
-const STRESS_DROP: Record<string, { before: number; after: number }> = {
-  moderate:  { before: 55, after: 22 },
-  high:      { before: 75, after: 28 },
-  very_high: { before: 85, after: 24 },
+type Activity = { icon: string; text: string };
+
+const TIER_CONFIG: Record<string, {
+  tierLabel: string;
+  before: number;
+  after: number;
+  defaultDuration: number;
+  primaryActivity: string;
+  activities: Activity[];
+}> = {
+  moderate: {
+    tierLabel: 'Tier 1 — Light',
+    before: 55,
+    after: 22,
+    defaultDuration: 5 * 60,
+    primaryActivity: 'Box breathing',
+    activities: [
+      { icon: '🌬', text: 'Box breathing — 4s inhale, hold, exhale, hold' },
+      { icon: '💭', text: 'Let Them reflection — awareness of what you control' },
+      { icon: '📊', text: 'Check-in logged to your weekly wellness score' },
+    ],
+  },
+  high: {
+    tierLabel: 'Tier 2 — Guided',
+    before: 75,
+    after: 28,
+    defaultDuration: 10 * 60,
+    primaryActivity: 'Box breathing + movement',
+    activities: [
+      { icon: '🌬', text: 'Box breathing — 4s inhale, hold, exhale, hold' },
+      { icon: '🚶', text: 'Movement break — stepped away to recharge' },
+      { icon: '💭', text: 'Let Them reflection — awareness of what you control' },
+      { icon: '📊', text: 'Check-in logged to your weekly wellness score' },
+    ],
+  },
+  very_high: {
+    tierLabel: 'Tier 3 — Full Break',
+    before: 85,
+    after: 24,
+    defaultDuration: 15 * 60,
+    primaryActivity: 'Full disconnect',
+    activities: [
+      { icon: '🚫', text: 'Full disconnect — stepped away from all screens' },
+      { icon: '🌬', text: 'Box breathing — 4s inhale, hold, exhale, hold' },
+      { icon: '💧', text: 'Hydrated and moved away from desk' },
+      { icon: '💭', text: 'Let Them reflection — awareness of what you control' },
+      { icon: '📊', text: 'Check-in logged to your weekly wellness score' },
+    ],
+  },
 };
 
-const DURATION_LABEL: Record<string, string> = {
-  moderate:  '5 min',
-  high:      '10 min',
-  very_high: '15 min',
-};
+function formatDuration(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  if (secs === 0) return `${mins} min`;
+  return `${mins}m ${secs}s`;
+}
 
 export default function ReturnScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { stressCategory, reflectionType } = useLocalSearchParams<{
+  const { stressCategory, breakDuration, reflectionType } = useLocalSearchParams<{
     stressCategory: string;
+    breakDuration: string;
     reflectionType: string;
   }>();
 
-  const category = stressCategory ?? 'high';
-  const drop = STRESS_DROP[category] ?? STRESS_DROP.high;
-  const duration = DURATION_LABEL[category] ?? '10 min';
-  const scoreDrop = drop.before - drop.after;
+  const category = (stressCategory in TIER_CONFIG ? stressCategory : 'high') as keyof typeof TIER_CONFIG;
+  const config = TIER_CONFIG[category];
+  const scoreDrop = config.before - config.after;
+
+  const actualSeconds = breakDuration ? parseInt(breakDuration, 10) : config.defaultDuration;
+  const duration = formatDuration(isNaN(actualSeconds) ? config.defaultDuration : actualSeconds);
+
+  const reflectionLabel = reflectionType === 'controllable' ? 'Act' : 'Let Go';
 
   const ringAnim = useRef(new Animated.Value(0)).current;
 
@@ -53,15 +104,15 @@ export default function ReturnScreen() {
     }).start();
   }, []);
 
-  const ringColor = drop.after <= 30 ? COLORS.sage : COLORS.coral;
+  const ringColor = config.after <= 30 ? COLORS.sage : COLORS.coral;
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={[styles.headerBar, { paddingTop: insets.top + 16 }]}>
+      <View style={[styles.headerBar, { paddingTop: insets.top - 44 }]}>
         <Text style={styles.headerCheck}>✅</Text>
         <View>
           <Text style={styles.headerTitle}>You're Back on Track</Text>
-          <Text style={styles.headerSub}>Stress normalized — great job!</Text>
+          <Text style={styles.headerSub}>{config.tierLabel} complete — great job!</Text>
         </View>
       </View>
 
@@ -70,12 +121,12 @@ export default function ReturnScreen() {
           <View style={styles.ringWrap}>
             <View style={[styles.ringOuter, { borderColor: ringColor }]}>
               <View style={styles.ringInner}>
-                <Text style={[styles.ringValue, { color: ringColor }]}>{drop.after}%</Text>
+                <Text style={[styles.ringValue, { color: ringColor }]}>{config.after}%</Text>
                 <Text style={styles.ringLabel}>stress score</Text>
               </View>
             </View>
           </View>
-          <Text style={styles.ringCaption}>Down from {drop.before}% before your break</Text>
+          <Text style={styles.ringCaption}>Down from {config.before}% before your break</Text>
         </View>
 
         <View style={styles.statsRow}>
@@ -88,7 +139,7 @@ export default function ReturnScreen() {
             <Text style={styles.statLabel}>Score drop</Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={[styles.statValue, { color: COLORS.sage }]}>✔</Text>
+            <Text style={[styles.statValue, { color: COLORS.sage }]}>{reflectionLabel}</Text>
             <Text style={styles.statLabel}>Reflected</Text>
           </View>
         </View>
@@ -97,25 +148,19 @@ export default function ReturnScreen() {
           <Text style={styles.mlTitle}>🔁 Azure ML Learning</Text>
           <Text style={styles.mlText}>
             {reflectionType === 'controllable'
-              ? 'You identified an actionable stressor. Box breathing helped you reset. Logged for future interventions.'
-              : 'You chose to let this one go. Box breathing helped you reset. Logged for future interventions.'}
+              ? `You identified an actionable stressor. ${config.primaryActivity} helped you reset. Logged for future interventions.`
+              : `You chose to let this one go. ${config.primaryActivity} helped you reset. Logged for future interventions.`}
           </Text>
         </View>
 
         <View style={styles.recapCard}>
           <Text style={styles.recapTitle}>What helped</Text>
-          <View style={styles.recapRow}>
-            <Text style={styles.recapIcon}>🌬</Text>
-            <Text style={styles.recapText}>Box breathing — 4s inhale, hold, exhale, hold</Text>
-          </View>
-          <View style={styles.recapRow}>
-            <Text style={styles.recapIcon}>💭</Text>
-            <Text style={styles.recapText}>Let Them reflection — awareness of what you control</Text>
-          </View>
-          <View style={styles.recapRow}>
-            <Text style={styles.recapIcon}>📊</Text>
-            <Text style={styles.recapText}>Check-in logged to your weekly wellness score</Text>
-          </View>
+          {config.activities.map((activity, i) => (
+            <View key={i} style={styles.recapRow}>
+              <Text style={styles.recapIcon}>{activity.icon}</Text>
+              <Text style={styles.recapText}>{activity.text}</Text>
+            </View>
+          ))}
         </View>
 
         <TouchableOpacity style={styles.ctaButton} onPress={() => router.push('/check_in')} activeOpacity={0.8}>

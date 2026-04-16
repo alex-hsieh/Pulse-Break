@@ -68,7 +68,7 @@ export default function ReflectionScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={[styles.headerBar, { paddingTop: insets.top + 14 }]}>
+      <View style={[styles.headerBar, { paddingTop: insets.top - 18 }]}>
         <Text style={styles.headerEyebrow}>Reflection</Text>
         <Text style={styles.headerSub}>Let Them Theory</Text>
       </View>
