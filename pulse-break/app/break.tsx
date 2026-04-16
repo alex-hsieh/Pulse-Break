@@ -71,6 +71,7 @@ const TIER3_CHECKLIST = [
   { icon: '🚶', text: 'Step away from your desk' },
   { icon: '💧', text: 'Drink water — skip the caffeine' },
   { icon: '🌬️', text: 'Box breathe: 4s in, hold, out, hold' },
+  { icon: '📝', text: 'Journal or reflect on what’s in your control vs. not' },
   { icon: '☀️', text: 'Get outside or near a window' },
 ];
 
@@ -141,7 +142,8 @@ export default function BreakScreen() {
           if (s <= 1) {
             clearInterval(intervalRef.current!);
             stopBreathing();
-            router.push({ pathname: '/reflection', params: { checkInId } } as any);
+            const nextScreen = category === 'very_high' ? '/journal' : '/reflection';
+            router.push({ pathname: nextScreen, params: { checkInId, stressCategory: category, breakDuration: String(config.duration) } } as any);
             return 0;
           }
           return s - 1;
@@ -216,7 +218,8 @@ export default function BreakScreen() {
   function handleDoneEarly() {
     if (intervalRef.current) clearInterval(intervalRef.current);
     stopBreathing();
-    router.push({ pathname: '/reflection', params: { checkInId, stressCategory: category, breakDuration: String(config.duration - secondsLeft) } } as any);
+    const nextScreen = category === 'very_high' ? '/journal' : '/reflection';
+    router.push({ pathname: nextScreen, params: { checkInId, stressCategory: category, breakDuration: String(config.duration - secondsLeft) } } as any);
   }
 
   function toggleCheck(i: number) {

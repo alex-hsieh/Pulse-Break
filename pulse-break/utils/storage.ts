@@ -100,6 +100,45 @@ export interface WellnessScore {
   label: 'Building' | 'Steady' | 'Thriving' | 'Excellent';
 }
 
+export interface JournalEntry {
+  id: string;
+  checkInId: string;
+  timestamp: string;
+  text: string;
+  promptTitle: string;
+  moodTag: string;
+}
+
+const JOURNAL_KEY = 'pulse_break_journal';
+
+export async function saveJournalEntry(
+  checkInId: string,
+  text: string,
+  prompt: { title: string; moodTag: string }
+): Promise<JournalEntry> {
+  const entry: JournalEntry = {
+    id: generateId(),
+    checkInId,
+    timestamp: new Date().toISOString(),
+    text,
+    promptTitle: prompt.title,
+    moodTag: prompt.moodTag,
+  };
+  const raw = await AsyncStorage.getItem(JOURNAL_KEY);
+  const existing: JournalEntry[] = raw ? JSON.parse(raw) : [];
+  await AsyncStorage.setItem(JOURNAL_KEY, JSON.stringify([entry, ...existing]));
+  return entry;
+}
+
+export async function getJournalEntries(): Promise<JournalEntry[]> {
+  try {
+    const raw = await AsyncStorage.getItem(JOURNAL_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function getWeeklyWellnessScore(): Promise<WellnessScore> {
   const checkIns = await getWeeklyCheckIns();
   const reflections = await getReflections();
