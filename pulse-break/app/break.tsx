@@ -21,10 +21,12 @@ const COLORS = {
   white: '#FDFCFA',
 };
 
+
+
 const TIER_CONFIG = {
   moderate: {
     eyebrow: 'Elevated stress detected',
-    header: "A short pause\ncan help reset.",
+    header: "A short pause can help reset.",
     duration: 5 * 60,
     durationLabel: '5 minutes',
     accentColor: COLORS.amber,
@@ -33,7 +35,7 @@ const TIER_CONFIG = {
   },
   high: {
     eyebrow: 'High stress detected',
-    header: "Let's take a break\nto reset.",
+    header: "Let's take a break to reset.",
     duration: 10 * 60,
     durationLabel: '10 minutes',
     accentColor: COLORS.coral,
@@ -42,7 +44,7 @@ const TIER_CONFIG = {
   },
   very_high: {
     eyebrow: 'Urgent — very high stress',
-    header: "You need a break\nright now.",
+    header: "You need a break right now.",
     duration: 15 * 60,
     durationLabel: '15 minutes',
     accentColor: COLORS.coral,
@@ -110,6 +112,7 @@ export default function BreakScreen() {
   const tipTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const breathScale = useRef(new Animated.Value(1)).current;
   const breathAnim = useRef<Animated.CompositeAnimation | null>(null);
+  const currentPhaseRef = useRef(0);
 
   const breakWindow = getNextBreakWindow();
 
@@ -128,6 +131,7 @@ export default function BreakScreen() {
       if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current);
       if (breathAnim.current) breathAnim.current.stop();
       breathScale.setValue(1);
+      currentPhaseRef.current = 0;
     }, [config.duration])
   );
 
@@ -162,6 +166,7 @@ export default function BreakScreen() {
 
   function runPhase(index: number) {
     const phase = BREATH_PHASES[index];
+    currentPhaseRef.current = index;
     setPhaseLabel(phase.label);
     setPhaseIndex(index);
     const toScale = phase.label === 'Inhale' ? 1.35 : phase.label === 'Exhale' ? 1 : undefined;
@@ -179,9 +184,9 @@ export default function BreakScreen() {
     }, phase.duration);
   }
 
-  function startBreathing() {
+  function startBreathing(fromIndex?: number) {
     if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current);
-    runPhase(0);
+    runPhase(fromIndex ?? currentPhaseRef.current);
   }
 
   function stopBreathing() {
@@ -192,7 +197,7 @@ export default function BreakScreen() {
   function handleStart() {
     setTimerActive(true);
     setPaused(false);
-    if (category !== 'very_high') startBreathing();
+    if (category !== 'very_high') startBreathing(0);
   }
 
   function handlePause() {
@@ -236,7 +241,7 @@ export default function BreakScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: config.accentColor }]}>
-      <View style={[styles.headerBar, { backgroundColor: config.accentColor }]}>
+      <View style={[styles.headerBar,{ backgroundColor: config.accentColor }]}>
         <Text style={styles.headerEyebrow}>{config.eyebrow}</Text>
         <View style={styles.tierBadge}>
           <Text style={styles.tierBadgeText}>{config.tier}</Text>
@@ -249,30 +254,36 @@ export default function BreakScreen() {
         {!timerActive ? (
           <>
             <View style={styles.tierCard}>
-              <View style={[styles.tierRow, category === 'moderate' && styles.tierActive]}>
-                <View style={[styles.tierDot, { backgroundColor: COLORS.amber }]} />
-                <View style={styles.tierText}>
-                  <Text style={styles.tierName}>Tier 1 — Light</Text>
-                  <Text style={styles.tierDesc}>Breathing reset, 5 min</Text>
+              {category === 'moderate' && (
+                <View style={[styles.tierRow, styles.tierActive, { borderBottomWidth: 0 }]}>
+                  <View style={[styles.tierDot, { backgroundColor: COLORS.amber }]} />
+                  <View style={styles.tierText}>
+                    <Text style={styles.tierName}>Tier 1 — Light</Text>
+                    <Text style={styles.tierDesc}>Breathing reset, 5 min</Text>
+                  </View>
+                  <Text style={styles.tierCheck}>✓</Text>
                 </View>
-                {category === 'moderate' && <Text style={styles.tierCheck}>✓</Text>}
-              </View>
-              <View style={[styles.tierRow, category === 'high' && styles.tierActive]}>
-                <View style={[styles.tierDot, { backgroundColor: COLORS.coral }]} />
-                <View style={styles.tierText}>
-                  <Text style={styles.tierName}>Tier 2 — Guided</Text>
-                  <Text style={styles.tierDesc}>Breathing + movement, 10 min</Text>
+              )}
+              {category === 'high' && (
+                <View style={[styles.tierRow, styles.tierActive, { borderBottomWidth: 0 }]}>
+                  <View style={[styles.tierDot, { backgroundColor: COLORS.coral }]} />
+                  <View style={styles.tierText}>
+                    <Text style={styles.tierName}>Tier 2 — Guided</Text>
+                    <Text style={styles.tierDesc}>Breathing + movement, 10 min</Text>
+                  </View>
+                  <Text style={styles.tierCheck}>✓</Text>
                 </View>
-                {category === 'high' && <Text style={styles.tierCheck}>✓</Text>}
-              </View>
-              <View style={[styles.tierRow, category === 'very_high' && styles.tierActive, { borderBottomWidth: 0 }]}>
-                <View style={[styles.tierDot, { backgroundColor: '#B03020' }]} />
-                <View style={styles.tierText}>
-                  <Text style={styles.tierName}>Tier 3 — Full Break</Text>
-                  <Text style={styles.tierDesc}>Full disconnect, 15 min</Text>
+              )}
+              {category === 'very_high' && (
+                <View style={[styles.tierRow, styles.tierActive, { borderBottomWidth: 0 }]}>
+                  <View style={[styles.tierDot, { backgroundColor: '#B03020' }]} />
+                  <View style={styles.tierText}>
+                    <Text style={styles.tierName}>Tier 3 — Full Break</Text>
+                    <Text style={styles.tierDesc}>Full disconnect, 15 min</Text>
+                  </View>
+                  <Text style={styles.tierCheck}>✓</Text>
                 </View>
-                {category === 'very_high' && <Text style={styles.tierCheck}>✓</Text>}
-              </View>
+              )}
             </View>
 
             <View style={styles.infoRow}>

@@ -120,7 +120,7 @@ export default function HomeScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={0}
         >
-          <View style={[styles.headerBar, { paddingTop: insets.top + 14 }]}>
+          <View style={[styles.headerBar, { paddingTop: insets.top }]}>
             <View>
               <Text style={styles.appName}>Pulse Break</Text>
               <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
@@ -151,7 +151,7 @@ export default function HomeScreen() {
                   <Text style={styles.forecastLabel}>{item.label}</Text>
                 </View>
               ))}
-              <Text style={styles.forecastNote}>Based on your calendar · Azure ML vision</Text>
+              <Text style={styles.forecastNote}>Based on your calendar events</Text>
             </View>
 
             <Text style={styles.header}>How are you feeling?</Text>
@@ -222,20 +222,20 @@ const styles = StyleSheet.create({
   headerBar: {
     backgroundColor: COLORS.sage,
     paddingHorizontal: 24,
-    paddingBottom: 16,
+    paddingBottom: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   appName: { fontSize: 11, fontWeight: '600', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 2 },
-  greeting: { fontSize: 20, fontWeight: '600', color: COLORS.white },
+  greeting: { fontSize: 20, fontWeight: '600', color: COLORS.white},
   stressIndicator: { alignItems: 'flex-end', gap: 4 },
   stressIndicatorLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 0.8 },
   stressBarMini: { width: 80, height: 5, backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 99, overflow: 'hidden' },
   stressBarFill: { height: '100%', backgroundColor: COLORS.white, borderRadius: 99 },
   stressIndicatorValue: { fontSize: 11, color: 'rgba(255,255,255,0.85)', fontWeight: '600' },
   scroll: { flex: 1, backgroundColor: COLORS.cream },
-  scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 40 },
+  scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 20 },
   forecastCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 28, borderWidth: 1, borderColor: '#E0DDD6' },
   forecastTitle: { fontSize: 11, fontWeight: '600', color: COLORS.inkSoft, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 12 },
   forecastRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 8 },
@@ -245,19 +245,19 @@ const styles = StyleSheet.create({
   forecastLabel: { fontSize: 12, color: COLORS.inkMid, flex: 1 },
   forecastNote: { fontSize: 10, color: COLORS.inkSoft, fontStyle: 'italic', marginTop: 8, textAlign: 'right' },
   header: { fontSize: 26, fontWeight: '700', color: COLORS.ink, marginBottom: 16 },
-  emojiRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 32 },
+  emojiRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 },
   emojiButton: { alignItems: 'center', padding: 6, borderRadius: 12, flex: 1, marginHorizontal: 2, height: 80, justifyContent: 'center' },
   emojiSelected: { backgroundColor: COLORS.sage + '33', borderWidth: 1.5, borderColor: COLORS.sage },
   emoji: { fontSize: 32, marginBottom: 4 },
   emojiLabel: { fontSize: 9, color: COLORS.inkSoft, textAlign: 'center' },
   emojiLabelSelected: { color: COLORS.sage, fontWeight: '600' },
-  notesWrapper: { marginTop: 8 },
+  notesWrapper: { marginTop: 2 },
   notesInput: { backgroundColor: COLORS.white, borderRadius: 12, padding: 16, fontSize: 15, color: COLORS.ink, minHeight: 80, textAlignVertical: 'top', borderWidth: 1, borderColor: '#E0DDD6' },
-  charCount: { fontSize: 12, color: COLORS.inkSoft, textAlign: 'right', marginTop: 4, marginBottom: 16 },
+  charCount: { fontSize: 12, color: COLORS.inkSoft, textAlign: 'right', marginTop: 4, marginBottom: 8 },
   submitButton: { backgroundColor: COLORS.teal, borderRadius: 12, paddingVertical: 16, alignItems: 'center' },
   submitText: { color: COLORS.white, fontSize: 16, fontWeight: '600' },
-  quote: { marginTop: 20, fontSize: 14, fontStyle: 'italic', color: COLORS.inkSoft, textAlign: 'center', lineHeight: 22, paddingHorizontal: 8 },
-  confirmation: { backgroundColor: COLORS.sage + '22', borderRadius: 12, padding: 20, alignItems: 'center', marginTop: 16, borderWidth: 1, borderColor: COLORS.sage },
+  quote: { marginTop: 5, fontSize: 14, fontStyle: 'italic', color: COLORS.inkSoft, textAlign: 'center', lineHeight: 20, paddingHorizontal: 8 },
+  confirmation: { backgroundColor: COLORS.sage + '22', borderRadius: 12, padding: 20, alignItems: 'center', marginTop: 8, borderWidth: 1, borderColor: COLORS.sage },
   confirmationText: { fontSize: 16, color: COLORS.sage, fontWeight: '600' },
   confirmationHigh: { backgroundColor: '#D4715A22', borderColor: '#D4715A' },
   confirmationTextHigh: { color: '#D4715A' },
