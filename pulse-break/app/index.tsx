@@ -3,6 +3,7 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { saveCheckIn } from '../utils/storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SvgXml } from 'react-native-svg';
 import encouragementData from '../content/encouragement-prompts.json';
 import {
   View,
@@ -21,6 +22,9 @@ const COLORS = {
   sage: '#7A9E7E',
   sagePale: '#EAF2EB',
   teal: '#3D8B8B',
+  tealDark: 'rgba(61, 139, 139, 1)',
+  tealPale: '#7AC8C8',
+  lightBlue: '#B1D9E5',
   coral: '#D4715A',
   amber: '#D4A055',
   cream: '#F8F5EF',
@@ -47,6 +51,15 @@ const MOCK_FORECAST = [
   { time: '2 PM',  label: 'Sprint review',   pct: 62, color: '#D4A055' },
   { time: '4 PM',  label: 'Deadline crunch', pct: 85, color: '#D4715A' },
 ];
+
+const LOGO_SVG = `
+<svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="50" width="120" height="120" rx="28" fill="#FFFFFF"/>
+  <path d="M 58 110 L 82 110 L 90 78 L 98 142 L 106 98 L 116 110 C 126 110 130 88 140 80 C 150 72 152 98 148 110 C 144 122 132 128 120 120" fill="none" stroke="#1C2B2B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="120" cy="120" r="3" fill="#7A9E7E"/>
+  <text x="182" y="144" font-family="sans-serif" font-size="94" font-weight="700" fill="#FFFFFF">Pulse <tspan font-weight="600" fill="#3D8B8B">Break</tspan></text>
+</svg>
+`;
 
 function getDailyEncouragement(): string {
   const today = new Date();
@@ -120,17 +133,21 @@ export default function HomeScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={0}
         >
-          <View style={[styles.headerBar, { paddingTop: insets.top }]}>
-            <View>
-              <Text style={styles.appName}>Pulse Break</Text>
-              <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
+          <View style={styles.headerBar}>
+            <View style={[styles.logoBar, { height: insets.top }]}>
+              <SvgXml xml={LOGO_SVG} width={130} height={42} />
             </View>
-            <View style={styles.stressIndicator}>
-              <Text style={styles.stressIndicatorLabel}>Today</Text>
-              <View style={styles.stressBarMini}>
-                <View style={[styles.stressBarFill, { width: '30%' }]} />
+            <View style={styles.headerRow}>
+              <View>
+                <Text style={styles.greeting}>Good {getTimeOfDay()}</Text>
               </View>
-              <Text style={styles.stressIndicatorValue}>Low</Text>
+              <View style={styles.stressIndicator}>
+                <Text style={styles.stressIndicatorLabel}>Today</Text>
+                <View style={styles.stressBarMini}>
+                  <View style={[styles.stressBarFill, { width: '30%' }]} />
+                </View>
+                <Text style={styles.stressIndicatorValue}>Low</Text>
+              </View>
             </View>
           </View>
 
@@ -218,22 +235,30 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.sage },
+  container: { flex: 1, backgroundColor: COLORS.lightBlue },
   headerBar: {
-    backgroundColor: COLORS.sage,
-    paddingHorizontal: 24,
-    paddingBottom: 12,
+    backgroundColor: COLORS.lightBlue,
+    flexDirection: 'column',
+  },
+  logoBar: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingBottom: 12,
   },
-  appName: { fontSize: 11, fontWeight: '600', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 2 },
-  greeting: { fontSize: 20, fontWeight: '600', color: COLORS.white},
+  // appName: { fontSize: 0, fontWeight: '600', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 2 },
+  greeting: { fontSize: 15, fontWeight: '600', color: COLORS.tealDark },
   stressIndicator: { alignItems: 'flex-end', gap: 4 },
-  stressIndicatorLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 0.8 },
-  stressBarMini: { width: 80, height: 5, backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: 99, overflow: 'hidden' },
-  stressBarFill: { height: '100%', backgroundColor: COLORS.white, borderRadius: 99 },
-  stressIndicatorValue: { fontSize: 11, color: 'rgba(255,255,255,0.85)', fontWeight: '600' },
+  stressIndicatorLabel: { fontSize: 10, color: 'rgba(61, 139, 139, 1)', textTransform: 'uppercase', letterSpacing: 0.8 },
+  stressBarMini: { width: 80, height: 5, backgroundColor: 'rgba(20, 13, 13, 0.25)', borderRadius: 99, overflow: 'hidden' },
+  stressBarFill: { height: '100%', backgroundColor: COLORS.teal, borderRadius: 99 },
+  stressIndicatorValue: { fontSize: 11, color: 'rgba(61, 139, 139, 1)', fontWeight: '600' },
   scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 20 },
   forecastCard: { backgroundColor: COLORS.white, borderRadius: 16, padding: 16, marginBottom: 28, borderWidth: 1, borderColor: '#E0DDD6' },
