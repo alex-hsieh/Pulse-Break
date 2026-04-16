@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
@@ -6,8 +6,11 @@ import {
   View,
   Text,
   TouchableOpacity,
+  TextInput,
   StyleSheet,
   ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 const COLORS = {
@@ -24,6 +27,9 @@ const COLORS = {
   white: '#FDFCFA',
 };
 
+const DEMO_USERNAME = 'demo';
+const DEMO_PASSWORD = 'pulsebreak';
+
 const LOGO_SVG = `
 <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
   <rect x="40" y="50" width="120" height="120" rx="28" fill="#FFFFFF"/>
@@ -33,71 +39,82 @@ const LOGO_SVG = `
 </svg>
 `;
 
-const FEATURES = [
-  {
-    icon: '🫀',
-    title: 'Check In',
-    description: 'Rate your stress in seconds and log what\'s on your mind.',
-  },
-  {
-    icon: '🌬️',
-    title: 'Take a Break',
-    description: 'Guided breathing and disconnect exercises tailored to your stress level.',
-  },
-  {
-    icon: '✦',
-    title: 'Reflect',
-    description: 'Use the Let Them Theory to release what you can\'t control.',
-  },
-];
-
 export default function LandingScreen() {
   const router = useRouter();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = () => {
+    if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
+      setError('');
+      router.push('/check_in' as any);
+    } else {
+      setError('Incorrect username or password.');
+    }
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.heroSection}>
-          <SvgXml xml={LOGO_SVG} width={240} height={78} />
-          <Text style={styles.tagline}>Your daily stress companion.</Text>
-          <Text style={styles.subTagline}>
-            Check in, breathe, and reflect — in under a minute.
-          </Text>
-        </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.heroSection}>
+            <SvgXml xml={LOGO_SVG} width={240} height={78} />
+            <Text style={styles.tagline}>Your daily stress companion.</Text>
+            <Text style={styles.subTagline}>
+              Check in, breathe, and reflect — in under a minute.
+            </Text>
+          </View>
 
-        <View style={styles.featuresSection}>
-          {FEATURES.map((feature) => (
-            <View key={feature.title} style={styles.featureCard}>
-              <Text style={styles.featureIcon}>{feature.icon}</Text>
-              <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>{feature.title}</Text>
-                <Text style={styles.featureDesc}>{feature.description}</Text>
-              </View>
+          <View style={styles.loginSection}>
+            <Text style={styles.loginTitle}>Sign In</Text>
+
+            <View style={styles.fieldGroup}>
+              <Text style={styles.fieldLabel}>Username</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter username"
+                placeholderTextColor={COLORS.inkSoft}
+                value={username}
+                onChangeText={(v) => { setUsername(v); setError(''); }}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
             </View>
-          ))}
-        </View>
 
-        <TouchableOpacity
-          style={styles.ctaButton}
-          onPress={() => router.push('/check_in' as any)}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.ctaText}>Start Check-In</Text>
-        </TouchableOpacity>
+            <View style={styles.fieldGroup}>
+              <Text style={styles.fieldLabel}>Password</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter password"
+                placeholderTextColor={COLORS.inkSoft}
+                value={password}
+                onChangeText={(v) => { setPassword(v); setError(''); }}
+                secureTextEntry
+                autoCapitalize="none"
+              />
+            </View>
 
-        <TouchableOpacity
-          style={styles.historyLink}
-          onPress={() => router.push('/history' as any)}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.historyLinkText}>View History</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={handleLogin}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.loginButtonText}>Log In</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.demoHint}>Demo: demo / pulsebreak</Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -126,36 +143,54 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
   },
-  featuresSection: {
+  loginSection: {
     backgroundColor: COLORS.cream,
     paddingHorizontal: 24,
     paddingTop: 28,
-    paddingBottom: 8,
-    gap: 12,
+    paddingBottom: 32,
   },
-  featureCard: {
+  loginTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: COLORS.ink,
+    marginBottom: 20,
+  },
+  fieldGroup: { marginBottom: 16 },
+  fieldLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.inkSoft,
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+    marginBottom: 6,
+  },
+  input: {
     backgroundColor: COLORS.white,
-    borderRadius: 14,
-    padding: 18,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 14,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 15,
+    color: COLORS.ink,
     borderWidth: 1,
     borderColor: '#E0DDD6',
   },
-  featureIcon: { fontSize: 28, lineHeight: 34 },
-  featureText: { flex: 1 },
-  featureTitle: { fontSize: 16, fontWeight: '700', color: COLORS.ink, marginBottom: 4 },
-  featureDesc: { fontSize: 13, color: COLORS.inkSoft, lineHeight: 19 },
-  ctaButton: {
+  errorText: {
+    fontSize: 13,
+    color: COLORS.coral,
+    marginBottom: 12,
+  },
+  loginButton: {
     backgroundColor: COLORS.teal,
     borderRadius: 14,
     paddingVertical: 18,
     alignItems: 'center',
-    marginHorizontal: 24,
-    marginTop: 28,
+    marginTop: 4,
   },
-  ctaText: { color: COLORS.white, fontSize: 17, fontWeight: '700' },
-  historyLink: { alignItems: 'center', paddingVertical: 16 },
-  historyLinkText: { fontSize: 14, color: COLORS.inkSoft },
+  loginButtonText: { color: COLORS.white, fontSize: 17, fontWeight: '700' },
+  demoHint: {
+    fontSize: 12,
+    color: COLORS.inkSoft,
+    textAlign: 'center',
+    marginTop: 16,
+  },
 });
