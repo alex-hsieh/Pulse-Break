@@ -117,17 +117,17 @@ export default function ReflectionScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#8B6BC0' },
+  container: { flex: 1, backgroundColor: '#B1D9E5' },
   headerBar: {
-    backgroundColor: '#8B6BC0',
+    backgroundColor: '#B1D9E5',
     paddingHorizontal: 24,
     paddingBottom: 14,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  headerEyebrow: { fontSize: 13, color: 'rgba(255,255,255,0.9)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.8 },
-  headerSub: { fontSize: 12, color: 'rgba(255,255,255,0.65)' },
+  headerEyebrow: { fontSize: 13, color: COLORS.teal, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.8 },
+  headerSub: { fontSize: 12, color: COLORS.inkSoft },
   scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 48 },
   header: { fontSize: 28, fontWeight: '700', color: COLORS.ink, lineHeight: 36, marginBottom: 28 },

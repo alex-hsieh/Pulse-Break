@@ -11,7 +11,7 @@ const COLORS = {
   teal: '#3D8B8B',
   tealPale: '#E4F2F2',
   coral: '#D4715A',
-  coralPale: '#FAE9E4',
+  coralPale: '#e28780',
   amber: '#D4A055',
   amberPale: '#FAF0DF',
   cream: '#F8F5EF',
@@ -38,7 +38,7 @@ const TIER_CONFIG = {
     header: "Let's take a break to reset.",
     duration: 10 * 60,
     durationLabel: '10 minutes',
-    accentColor: COLORS.coral,
+    accentColor: COLORS.coralPale,
     tier: 'Tier 2 — Guided',
     tips: ['Step away from your screen', 'Take 5 slow, deep breaths', 'Drink a glass of water', 'Take a short walk'],
   },
@@ -242,8 +242,8 @@ export default function BreakScreen() {
   const checkedCount = checkedItems.filter(Boolean).length;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: config.accentColor }]}>
-      <View style={[styles.headerBar,{ backgroundColor: config.accentColor }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: COLORS.sage }]}>
+      <View style={[styles.headerBar,{ backgroundColor: COLORS.sage }]}>
         <Text style={styles.headerEyebrow}>{config.eyebrow}</Text>
         <View style={styles.tierBadge}>
           <Text style={styles.tierBadgeText}>{config.tier}</Text>

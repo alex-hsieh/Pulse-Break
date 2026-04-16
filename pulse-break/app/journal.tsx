@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 import {
   ScrollView,
   StyleSheet,
@@ -67,6 +67,14 @@ export default function JournalScreen() {
   const [selectedTag, setSelectedTag] = useState<PromptTag>('release');
   const [entry, setEntry] = useState('');
   const [saving, setSaving] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setSelectedTag('release');
+      setEntry('');
+      setSaving(false);
+    }, [])
+  );
 
   const activePrompt = useMemo(
     () => JOURNAL_PROMPTS.find((item) => item.tag === selectedTag) ?? JOURNAL_PROMPTS[0],
@@ -181,9 +189,9 @@ export default function JournalScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.coral },
+  container: { flex: 1, backgroundColor: COLORS.sage },
   headerBar: {
-    backgroundColor: COLORS.coral,
+    backgroundColor: COLORS.sage,
     paddingHorizontal: 24,
     paddingBottom: 14,
     flexDirection: 'row',

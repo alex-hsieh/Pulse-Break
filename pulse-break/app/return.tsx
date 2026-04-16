@@ -172,9 +172,9 @@ export default function ReturnScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.teal },
+  container: { flex: 1, backgroundColor: '#B1D9E5' },
   headerBar: {
-    backgroundColor: COLORS.teal,
+    backgroundColor: '#B1D9E5',
     paddingHorizontal: 24,
     paddingBottom: 16,
     flexDirection: 'row',
@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
     gap: 14,
   },
   headerCheck: { fontSize: 28 },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: COLORS.white },
-  headerSub: { fontSize: 13, color: 'rgba(255,255,255,0.75)', marginTop: 2 },
+  headerTitle: { fontSize: 18, fontWeight: '700', color: COLORS.ink },
+  headerSub: { fontSize: 13, color: COLORS.inkMid, marginTop: 2 },
   scroll: { flex: 1, backgroundColor: COLORS.cream },
   scrollContent: { paddingHorizontal: 24, paddingTop: 28, paddingBottom: 48 },
   ringSection: { alignItems: 'center', marginBottom: 24 },
