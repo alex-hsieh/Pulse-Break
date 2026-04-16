@@ -9,7 +9,7 @@ import {
   CheckIn,
   ControlRatio,
   WellnessScore,
-} from '../utils/storage';
+} from '../../utils/storage';
 
 const COLORS = {
   sage: '#7A9E7E',

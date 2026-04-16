@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { saveCheckIn } from '../utils/storage';
+import { saveCheckIn } from '../../utils/storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
-import encouragementData from '../content/encouragement-prompts.json';
+import encouragementData from '../../content/encouragement-prompts.json';
 import {
   View,
   Text,
@@ -255,7 +255,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 12,
   },
-  // appName: { fontSize: 0, fontWeight: '600', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 2 },
   greeting: { fontSize: 15, fontWeight: '600', color: COLORS.tealDark },
   stressIndicator: { alignItems: 'flex-end', gap: 4 },
   stressIndicatorLabel: { fontSize: 10, color: 'rgba(61, 139, 139, 1)', textTransform: 'uppercase', letterSpacing: 0.8 },

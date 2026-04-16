@@ -1,19 +1,23 @@
-import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
+import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <Tabs screenOptions={{ headerShown: false, tabBarActiveTintColor: '#3D8B8B' }}>
-        <Tabs.Screen name="index" options={{ href: null, tabBarStyle: { display: 'none' } }} />
-        <Tabs.Screen name="check_in" options={{ title: 'Home', tabBarIcon: ({ color, size }) => <Text style={{ fontSize: size, color }}>🏠</Text> }} />
-        <Tabs.Screen name="history" options={{ title: 'History', tabBarIcon: ({ color, size }) => <Text style={{ fontSize: size, color }}>📋</Text> }} />
-        <Tabs.Screen name="break" options={{ href: null }} />
-        <Tabs.Screen name="journal" options={{ href: null }} />
-        <Tabs.Screen name="reflection" options={{ href: null }} />
-        <Tabs.Screen name="return" options={{ href: null }} />
-      </Tabs>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: 'fade',
+          animationDuration: 280,
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="break" />
+        <Stack.Screen name="journal" />
+        <Stack.Screen name="reflection" />
+        <Stack.Screen name="return" />
+      </Stack>
     </SafeAreaProvider>
   );
 }
